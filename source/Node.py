@@ -8,7 +8,7 @@ class Node(Entity):
     def export_json(self, data: dict, parameter_to_not_export: list = []):
         data = add_entity(data, "node", self.full_name)
         for key, values in self.direct_parameters.items():
-            if not key.startswith("NaM") and not key.__contains__("(") and not parameter_to_not_export.__contains__(key):
+            if not key.startswith("NaM") and "(" not in key and key not in parameter_to_not_export:
                 data = add_parameter_value(data, "node", self.full_name, key, values["value"], values["type"])
         return data
     

@@ -45,13 +45,13 @@ class Building:
         return self.name
     
     def add_retrofit(self, name, commodity_to_retrofit, increase_performance, price):
-        if not self.nodes_to_retrofit.__contains__(commodity_to_retrofit):
+        if commodity_to_retrofit not in self.nodes_to_retrofit:
             self.nodes_to_retrofit.append(commodity_to_retrofit)
         self.retrofit_list.append(Retrofit(name, commodity_to_retrofit, price*self.quantity, increase_performance))
 
     def create_building_retrofit_mode(self):
         for node in self.nodes:
-            if self.nodes_to_retrofit.__contains__(node.get_name()):
+            if node.get_name() in self.nodes_to_retrofit:
                 ## Create a new node only for the building retrofit investment ## 
                 new_node = copy.deepcopy(node)
                 if "demand" in new_node.direct_parameters:
@@ -82,12 +82,12 @@ class Building:
                         self.connections.append(new_connection)
  
     def add_availability_factor(self, building_target, unit_target, time_serie, type_):
-        if building_target == "All" or building_target.__contains__(self.get_name()):
+        if building_target == "All" or self.get_name() in building_target:
             for unit in self.units:
                 unit.add_availability_factor(unit_target, time_serie, type_)
 
     def add_local_demand(self, commodity_target, building_target, time_serie, type_):
-        if building_target == "All" or building_target.__contains__(self.get_name()):
+        if building_target == "All" or self.get_name() in building_target:
             for node in self.nodes:
                 if type(time_serie[1]) == dict:
                     for key in time_serie[1]:

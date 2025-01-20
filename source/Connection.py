@@ -15,7 +15,7 @@ class Connection(Entity):
         data = self.link_nodes(data)
         data = add_entity(data, "connection", self.full_name)
         for key, values in self.direct_parameters.items():
-            if not key.startswith("NaM") and not key.__contains__("("):
+            if not key.startswith("NaM") and "(" not in key:
                 data = add_parameter_value(data, "connection",  self.full_name, key, values["value"], values["type"])
         return data
     
@@ -28,13 +28,13 @@ class Connection(Entity):
         for parameter in self.direct_parameters:
             if parameter.startswith("NaM"):
                 continue
-            if parameter.__contains__("(from_node)"):
+            if "(from_node)" in parameter:
                 parameter_name = parameter.split("(")[0]
                 data = add_parameter_value(data, "connection__from_node", [self.full_name, self.node_from.full_name], parameter_name, self.direct_parameters[parameter]["value"], self.direct_parameters[parameter]["type"])
-            if parameter.__contains__("(to_node)"):
+            if "(to_node)" in parameter:
                 parameter_name = parameter.split("(")[0]
                 data = add_parameter_value(data, "connection__to_node", [self.full_name, self.node_to.full_name], parameter_name, self.direct_parameters[parameter]["value"], self.direct_parameters[parameter]["type"])
-            if parameter.__contains__("(from_node_to_node)"):
+            if "(from_node_to_node)" in parameter:
                 parameter_name = parameter.split("(")[0]
                 data = add_parameter_value(data, "connection__node__node", [self.full_name, self.node_to.full_name, self.node_from.full_name], parameter_name, self.direct_parameters[parameter]["value"], self.direct_parameters[parameter]["type"])
         return data

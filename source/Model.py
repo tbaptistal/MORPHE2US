@@ -10,7 +10,7 @@ class Temporal_block(Entity):
     def export_json(self, data: dict, model_name, investment_link = ""):
         data = add_entity(data, "temporal_block", self.name)
         for key, values in self.direct_parameters.items():
-            if not key.startswith("NaM") and not key.__contains__("("):
+            if not key.startswith("NaM") and "(" not in key:
                 data = add_parameter_value(data, "temporal_block", self.name, key, values["value"], values["type"])
         data = add_entity(data, f"model__default_{investment_link}temporal_block", [model_name, self.name])
         return data
@@ -44,7 +44,7 @@ class Model(Entity):
         data = self.add_operations_json(data)
         data = self.add_investment_json(data)
         for key, values in self.direct_parameters.items():
-            if not key.startswith("NaM") and not key.__contains__("("):
+            if not key.startswith("NaM") and "(" not in key:
                 data = add_parameter_value(data, "model", self.name, key, values["value"], values["type"])
         return data
     

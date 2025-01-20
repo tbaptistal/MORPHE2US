@@ -54,16 +54,16 @@ class District:
                         self.connections.append(copy.deepcopy(connection))
 
     def add_availability_factor(self, district_target, building_target, unit_target, time_serie, type_):
-        if district_target == "All" or district_target.__contains__(self.name):
+        if district_target == "All" or self.name in district_target:
             if building_target == None: # No building to assign so only assign to unit at district level
                 for unit in self.units:
-                    unit.add_availability_factor(unit_target, time_serie, type_)
+                    unit.add_availability_factor(unit_target, time_serie, type_)   
             else:
                 for building in self.buildings:
                     building.add_availability_factor(building_target, unit_target, time_serie, type_)
 
     def add_local_demand(self, commodity_target, district_target, building_target, time_serie, type_):
-        if district_target == "All" or district_target.__contains__(self.name):
+        if district_target == "All" or self.name in district_target:
             if building_target == None: # No building to assign so only assign to nodes at district level
                 for node in building.nodes:
                     node.add_local_demand(commodity_target, time_serie, type_)

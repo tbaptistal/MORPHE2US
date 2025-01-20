@@ -28,19 +28,19 @@ class Unit(Entity):
 
         for parameter, values in self.direct_parameters.items():
             if not parameter.startswith("NaM"):
-                if parameter.__contains__("unit__from_node"):
+                if "unit__from_node" in parameter:
                     data = add_parameter_value(data, "unit__from_node", [self.full_name, f'{dict__link_nodes[parameter.split(")")[0].split("(")[1]]}'], parameter.split("(")[0], values["value"], values["type"])
-                elif parameter.__contains__("unit__to_node"):
+                elif "unit__to_node" in parameter:
                     data = add_parameter_value(data, "unit__to_node", [self.full_name, f'{dict__link_nodes[parameter.split(")")[0].split("(")[1]]}'], parameter.split("(")[0], values["value"], values["type"])
-                elif parameter.__contains__("from_node") and parameter.__contains__("to_node"):
+                elif "from_node" in parameter and "to_node" in parameter:
                     node_from = f'{dict__link_nodes[f"unit__from_node{parameter.split("to_node")[0].split("from_node")[1]}"]}'
                     node_to = f'{dict__link_nodes[f"unit__to_node{parameter.split(")")[0].split("to_node")[1]}"]}'
                     data = add_parameter_value(data, "unit__node__node", [self.full_name, node_to, node_from], parameter.split("(")[0], values["value"], values["type"])
-                elif (parameter.__contains__("from_node") and not parameter.__contains__("to_node")): 
+                elif "from_node" in parameter and "to_node" not in parameter: 
                     node_1 = f'{dict__link_nodes[f"unit__from_node{parameter.split("from_node")[1]}"]}'
                     node_2 = f'{dict__link_nodes[f"unit__from_node{parameter.split(")")[0].split("from_node")[2]}"]}'   
                     data = add_parameter_value(data, "unit__node__node", [self.full_name, node_1, node_2], parameter.split("(")[0], values["value"], values["type"])
-                elif (not parameter.__contains__("from_node") and parameter.__contains__("to_node")):
+                elif "from_node" not in parameter and "to_node" in parameter:
                     node_1 = f'{dict__link_nodes[f"unit__to_node{parameter.split("to_node")[1]}"]}'
                     node_2 = f'{dict__link_nodes[f"unit__to_node{parameter.split(")")[0].split("to_node")[2]}"]}'
                     data = add_parameter_value(data, "unit__node__node", [self.full_name, node_1, node_2], parameter.split("(")[0], values["value"], values["type"])   

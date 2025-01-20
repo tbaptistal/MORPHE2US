@@ -27,25 +27,25 @@ class Storage(Entity):
 
         for key, values in self.direct_parameters.items():
             if not key.startswith("NaM"):
-                if key.__contains__("(node)"):
+                if "(node)" in key:
                     data = add_parameter_value(data, "node", self.full_name, key.split("(")[0], values["value"], values["type"])
-                elif key.__contains__("(unit)"):
+                elif "(unit)" in key:
                     data = add_parameter_value(data, "unit", self.full_name, key.split("(")[0], values["value"], values["type"])
-                elif key.__contains__("(unit_or_node)"):
+                elif "(unit_or_node)" in key:
                     data = add_parameter_value(data, "unit", self.full_name, f"unit{key.split("(")[0]}", values["value"], values["type"])
                     data = add_parameter_value(data, "node", self.full_name, f"storage{key.split("(")[0]}", 0, "float")
-                elif key.__contains__("(unit_and_node)"):
+                elif "(unit_and_node)" in key:
                     if values["type"] == "string_special":
                         data = add_parameter_value(data, "unit", self.full_name, f"unit{key.split("(")[0]}", f"unit{values['value']}", values["type"])
                         data = add_parameter_value(data, "node", self.full_name, f"storage{key.split("(")[0]}", f"storage{values['value']}", values["type"])
                     else:
                         data = add_parameter_value(data, "unit", self.full_name, f"unit{key.split("(")[0]}", values["value"], values["type"])
                         data = add_parameter_value(data, "node", self.full_name, f"storage{key.split("(")[0]}", values["value"], values["type"])
-                elif key.__contains__("(unit__from_commodity)"):
+                elif "(unit__from_commodity)" in key:
                     data = add_parameter_value(data, "unit__from_node", [self.full_name, node__commodity], key.split("(")[0], values["value"], values["type"])
-                elif key.__contains__("(unit__to_commodity)"):
+                elif "(unit__to_commodity)" in key:
                     data = add_parameter_value(data, "unit__to_node", [self.full_name, node__commodity], key.split("(")[0], values["value"], values["type"])
-                elif key.__contains__("(unit__node__node)"):
+                elif "(unit__node__node)" in key:
                     data = add_parameter_value(data, "unit__node__node", [self.full_name, node__commodity, self.full_name], key.split("(")[0], values["value"], values["type"])
                 elif key == "number_of_units" or key == "candidate_units":
                     data = add_parameter_value(data, "unit", self.full_name, key, values["value"], values["type"])
