@@ -1,0 +1,16 @@
+{
+    "items": {
+        "input": {
+            "url": {
+                "username": "",
+                "password": ""
+            }
+        },
+        "output": {
+            "url": {
+                "username": "",
+                "password": ""
+            }
+        }
+    }
+}

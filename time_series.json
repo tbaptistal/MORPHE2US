@@ -1,0 +1,52 @@
+[
+    {
+        "info":{
+            "type": "availability_factor",
+            "commodity": null,
+            "building": "MSF",
+            "district": "all",
+            "unit": "wind turbine"
+        },
+        "time_serie": {
+            "repeat": true,
+            "ignore_year": false,
+            "resolution_type": "fixed",
+            "resolution": "1h",
+            "start_date": "2000-01-01T07:00:00",
+            "data": [
+                0.198,
+                0.18,
+                0.17,
+                0.16,
+                0.15,
+                0.14,
+                0.15
+            ]
+        }
+    }, 
+    {
+        "info":{
+            "type": "import_price",
+            "commodity": "electricity",
+            "building": null,
+            "district": "district_1",
+            "unit": null
+        },
+        "time_serie": {
+            "repeat": true,
+            "ignore_year": false,
+            "resolution_type": "variable",
+            "resolution": null,
+            "start_date": null,
+            "data": {
+                "2000-01-01T07:00:00": 0.198,
+                "2000-01-01T08:00:00": 0.18,
+                "2000-01-01T09:00:00": 0.17,
+                "2000-01-01T11:00:00": 0.16,
+                "2000-01-01T14:00:00": 0.15,
+                "2000-01-01T20:00:00": 0.14,
+                "2000-01-01T23:00:00": 0.15
+            }
+        }
+    }
+]

@@ -1,0 +1,149 @@
+{
+    "project": {
+        "version": 13,
+        "description": "",
+        "settings": {
+            "enable_execute_all": true
+        },
+        "specifications": {},
+        "connections": [
+            {
+                "name": "from Load template to input",
+                "from": [
+                    "Load template",
+                    "right"
+                ],
+                "to": [
+                    "input",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from input to Run SpineOpt",
+                "from": [
+                    "input",
+                    "right"
+                ],
+                "to": [
+                    "Run SpineOpt",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {
+                        "db_url@input": {
+                            "scenario_filter": {},
+                            "alternative_filter": {
+                                "Base": true
+                            }
+                        }
+                    },
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            },
+            {
+                "name": "from Run SpineOpt to output",
+                "from": [
+                    "Run SpineOpt",
+                    "right"
+                ],
+                "to": [
+                    "output",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
+            }
+        ],
+        "jumps": []
+    },
+    "items": {
+        "Run SpineOpt": {
+            "type": "Tool",
+            "description": "",
+            "x": -117.94797498293917,
+            "y": -6.00995359442976,
+            "specification": "Run SpineOpt",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "db_url@input"
+                },
+                {
+                    "type": "resource",
+                    "arg": "db_url@output"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "Load template": {
+            "type": "Tool",
+            "description": "",
+            "x": -494.02554367229266,
+            "y": 14.118674855777464,
+            "specification": "Load template",
+            "execute_in_work": true,
+            "cmd_line_args": [
+                {
+                    "type": "resource",
+                    "arg": "db_url@input"
+                }
+            ],
+            "kill_completed_processes": false,
+            "log_process_output": false
+        },
+        "input": {
+            "type": "Data Store",
+            "description": "",
+            "x": -303.4789050512925,
+            "y": -98.73395819832815,
+            "url": {
+                "dialect": "sqlite",
+                "host": "",
+                "port": "",
+                "database": {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/items/input/input.sqlite"
+                },
+                "schema": ""
+            }
+        },
+        "output": {
+            "type": "Data Store",
+            "description": "",
+            "x": 132.08122762667492,
+            "y": -0.0010412705684572643,
+            "url": {
+                "dialect": "sqlite",
+                "host": "",
+                "port": "",
+                "database": {
+                    "type": "path",
+                    "relative": true,
+                    "path": ".spinetoolbox/items/output/output.sqlite"
+                },
+                "schema": ""
+            }
+        }
+    }
+}
