@@ -48,9 +48,9 @@ class Unit(Entity):
                     data = add_parameter_value(data, "unit", self.full_name, parameter, values["value"], values["type"])
         return data
     
-    def add_availability_factor(self, unit_target, time_serie, type_):
+    def add_availability_factor(self, unit_target, data, data_type):
         if self.get_name() == unit_target:
-            self.add_direct_parameter("unit_availability_factor", time_serie, type_)
+            self.add_direct_parameter("unit_availability_factor", data, data_type)
     
     def add_co2(self):
         from_node = len([parameter for parameter in self.direct_parameters if parameter.startswith("NaM_unit__from_node")])
@@ -64,4 +64,4 @@ class Unit(Entity):
                 self.add_direct_parameter(f"fix_ratio_out_in_unit_flow(from_node1to_node{to_node+1})", self.direct_parameters["NaM_emission"]["value"])
         elif self.direct_parameters["NaM_emission"]["value"] < 0:
             self.add_direct_parameter(f"NaM_unit__from_node{from_node+1}", "CO2")
-            self.add_direct_parameter(f"fix_ratio_in_in_unit_flow(from_node1from_node{from_node+1})", self.direct_parameters["NaM_emission"]["value"])
+            self.add_direct_parameter(f"fix_ratio_in_in_unit_flow(from_node1from_node{from_node+1})", abs(self.direct_parameters["NaM_emission"]["value"]))

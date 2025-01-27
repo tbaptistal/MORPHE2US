@@ -8,28 +8,9 @@
         "specifications": {},
         "connections": [
             {
-                "name": "from Run SpineOpt to output",
+                "name": "from intput to Run SpineOpt",
                 "from": [
-                    "Run SpineOpt",
-                    "right"
-                ],
-                "to": [
-                    "output",
-                    "left"
-                ],
-                "filter_settings": {
-                    "known_filters": {},
-                    "auto_online": true,
-                    "enabled_filter_types": {
-                        "alternative_filter": false,
-                        "scenario_filter": true
-                    }
-                }
-            },
-            {
-                "name": "from input to Run SpineOpt",
-                "from": [
-                    "input",
+                    "intput",
                     "right"
                 ],
                 "to": [
@@ -38,7 +19,7 @@
                 ],
                 "filter_settings": {
                     "known_filters": {
-                        "db_url@input": {
+                        "db_url@intput": {
                             "scenario_filter": {},
                             "alternative_filter": {
                                 "Base": true
@@ -51,16 +32,35 @@
                         "scenario_filter": true
                     }
                 }
+            },
+            {
+                "name": "from Run SpineOpt to outputs",
+                "from": [
+                    "Run SpineOpt",
+                    "right"
+                ],
+                "to": [
+                    "outputs",
+                    "left"
+                ],
+                "filter_settings": {
+                    "known_filters": {},
+                    "auto_online": true,
+                    "enabled_filter_types": {
+                        "alternative_filter": false,
+                        "scenario_filter": true
+                    }
+                }
             }
         ],
         "jumps": []
     },
     "items": {
-        "input": {
+        "outputs": {
             "type": "Data Store",
             "description": "",
-            "x": -283.81318299967745,
-            "y": -187.24013162360436,
+            "x": 30.07229232386961,
+            "y": 25.060243603224674,
             "url": {
                 "dialect": "sqlite",
                 "host": "",
@@ -68,16 +68,16 @@
                 "database": {
                     "type": "path",
                     "relative": true,
-                    "path": ".spinetoolbox/items/input/input.sqlite"
+                    "path": ".spinetoolbox/items/outputs/outputs.sqlite"
                 },
                 "schema": ""
             }
         },
-        "output": {
+        "intput": {
             "type": "Data Store",
             "description": "",
-            "x": 100.69680381827874,
-            "y": -188.64716675797595,
+            "x": -282.6795478443743,
+            "y": 6.014458464773922,
             "url": {
                 "dialect": "sqlite",
                 "host": "",
@@ -85,7 +85,7 @@
                 "database": {
                     "type": "path",
                     "relative": true,
-                    "path": ".spinetoolbox/items/output/output.sqlite"
+                    "path": ".spinetoolbox/items/intput/intput.sqlite"
                 },
                 "schema": ""
             }
@@ -93,18 +93,18 @@
         "Run SpineOpt": {
             "type": "Tool",
             "description": "",
-            "x": -81.19942760141852,
-            "y": -187.38891692007084,
+            "x": -122.2939887837364,
+            "y": 1.002409744128986,
             "specification": "Run SpineOpt",
             "execute_in_work": true,
             "cmd_line_args": [
                 {
                     "type": "resource",
-                    "arg": "db_url@input"
+                    "arg": "db_url@intput"
                 },
                 {
                     "type": "resource",
-                    "arg": "db_url@output"
+                    "arg": "db_url@outputs"
                 }
             ],
             "kill_completed_processes": false,

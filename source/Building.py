@@ -1,12 +1,13 @@
 import copy
-from source.Connection import Connection
+from source.Connection import Connection  
+from dataclasses import dataclass
 
+@dataclass
 class Retrofit:
-    def __init__(self, name, commodity, price, decrease_to_normal):
-        self.name = name
-        self.commodity = commodity
-        self.price = price
-        self.decrease_to_normal = decrease_to_normal    
+    name: str
+    commodity: str
+    price: float
+    decrease_to_normal: float
 
 
 class Building:
@@ -81,20 +82,15 @@ class Building:
                         new_connection.add_direct_parameter("connection_capacity(to_node)", 1e15)
                         self.connections.append(new_connection)
  
-    def add_availability_factor(self, building_target, unit_target, time_serie, type_):
+    def add_availability_factor(self, building_target, unit_target, data, data_type):
         if building_target == "All" or self.get_name() in building_target:
             for unit in self.units:
-                unit.add_availability_factor(unit_target, time_serie, type_)
+                unit.add_availability_factor(unit_target, data, data_type)
 
-    def add_local_demand(self, commodity_target, building_target, time_serie, type_):
+    def add_local_demand(self, commodity_target, building_target, data, data_type):
         if building_target == "All" or self.get_name() in building_target:
             for node in self.nodes:
-                if type(time_serie[1]) == dict:
-                    for key in time_serie[1]:
-                        time_serie[1][key] = time_serie[1][key]*self.quantity
-                else:
-                    time_serie[1] = time_serie[1]*self.quantity
-                node.add_local_demand(commodity_target, time_serie, type_)
+                node.add_local_demand(commodity_target, data, data_type, self.quantity)
 
     def set_district_name(self, district_name: str):
         self.district_name = district_name

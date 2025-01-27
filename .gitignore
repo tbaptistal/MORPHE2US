@@ -130,3 +130,16 @@ Templates_json/
 20241120_MORPHE2US.xlsm
 20241203_MORPHE2US.xlsx
 20241204_MORPHE2US.xlsx
+demands/elec_demand.csv
+demands/solar.csv
+demands/heat_demand.csv
+MORPHE2US_packages/new_project_to_delete/.spinetoolbox/items/input/input.sqlite
+MORPHE2US_packages/new_project_to_delete/.spinetoolbox/items/input/input.sqlite
+MORPHE2US_packages/new_project_to_delete/.spinetoolbox/items/intput/intput.sqlite
+MORPHE2US_packages/new_project_to_delete/.spinetoolbox/items/outputs/outputs.sqlite
+MORPHE2US_packages/new_project_to_delete/.spinetoolbox/local/project_local_data.json
+MORPHE2US_packages/new_project_to_delete/.spinetoolbox/items/output/output.sqlite
+MORPHE2US_packages/new_project_to_delete/.spinetoolbox/items/input/input.sqlite
+MORPHE2US_packages/new_project_to_delete/.spinetoolbox/project.json
+MORPHE2US_packages/new_project_to_delete/.spinetoolbox/items/input/input.sqlite
+demands/example_data.csv

@@ -57,11 +57,11 @@ class Municipality:
         self.nodes.append(node)
         self.nodes[-1].set_location_name(f"_M-LVL")
 
-    def add_availability_factor(self, district_target, building_target, unit_target, time_serie, type_):
+    def add_availability_factor(self, district_target, building_target, unit_target, data, data_type):
         for district in self.districts:
-            district.add_availability_factor(district_target, building_target, unit_target, time_serie, type_)
+            district.add_availability_factor(district_target, building_target, unit_target, data, data_type)
 
-    def add_local_demand(self, commodity_target, district_target, building_target, time_serie, type_):
+    def add_local_demand(self, commodity_target, district_target, building_target, data, data_type):
         for district in self.districts:
-            district.add_local_demand(commodity_target, district_target, building_target, time_serie, type_)
+            district.add_local_demand(commodity_target, district_target, building_target, data, data_type)
             

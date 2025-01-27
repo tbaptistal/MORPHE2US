@@ -53,23 +53,24 @@ class District:
 
                         self.connections.append(copy.deepcopy(connection))
 
-    def add_availability_factor(self, district_target, building_target, unit_target, time_serie, type_):
+    def add_availability_factor(self, district_target, building_target, unit_target, data, data_type):
         if district_target == "All" or self.name in district_target:
             if building_target == None: # No building to assign so only assign to unit at district level
                 for unit in self.units:
-                    unit.add_availability_factor(unit_target, time_serie, type_)   
+                    unit.add_availability_factor(unit_target, data, data_type)   
             else:
                 for building in self.buildings:
-                    building.add_availability_factor(building_target, unit_target, time_serie, type_)
+                    building.add_availability_factor(building_target, unit_target, data, data_type)
 
-    def add_local_demand(self, commodity_target, district_target, building_target, time_serie, type_):
+    def add_local_demand(self, commodity_target, district_target, building_target, data, data_type):
+        # print(f"New demand for {commodity_target} in {district_target} and {building_target}")
         if district_target == "All" or self.name in district_target:
             if building_target == None: # No building to assign so only assign to nodes at district level
-                for node in building.nodes:
-                    node.add_local_demand(commodity_target, time_serie, type_)
+                for node in self.nodes:
+                    node.add_local_demand(commodity_target, data, data_type)
             else:
                 for building in self.buildings:
-                    building.add_local_demand(commodity_target, building_target, time_serie, type_)
+                    building.add_local_demand(commodity_target, building_target, data, data_type)
 
     def export_json(self, data):
         for node in self.nodes:

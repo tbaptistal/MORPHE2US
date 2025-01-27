@@ -1,12 +1,12 @@
 {
     "items": {
-        "input": {
+        "outputs": {
             "url": {
                 "username": "",
                 "password": ""
             }
         },
-        "output": {
+        "intput": {
             "url": {
                 "username": "",
                 "password": ""
