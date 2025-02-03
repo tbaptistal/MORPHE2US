@@ -131,6 +131,7 @@ Templates_json/
 20241203_MORPHE2US.xlsx
 20241204_MORPHE2US.xlsx
 demands/elec_demand.csv
+demands/demand.json
 demands/solar.csv
 demands/heat_demand.csv
 MORPHE2US_packages/*
