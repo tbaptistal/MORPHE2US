@@ -5,9 +5,9 @@ class Unit(Entity):
     def __init__(self):
         super().__init__("unit")
 
-    def add_availability_factor(self, unit_target, data, data_type):
+    def add_unit_parameter(self, target_parameter, unit_target, data, data_type):
         if self.get_name() == unit_target:
-            self.add_direct_parameter("unit_availability_factor", data, data_type)
+            self.add_direct_parameter(target_parameter, data, data_type)
     
     def add_co2(self):
         from_node = len([parameter for parameter in self.direct_parameters if parameter.startswith("NaM_unit__from_node")])

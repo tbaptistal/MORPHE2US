@@ -69,35 +69,35 @@ class District:
                         connection.set_location_name(f"_D-LVL_{building.get_name()}_{self.name}")
                         self.connections.append(copy.deepcopy(connection))
 
-    def add_availability_factor(self, district_target, building_target, unit_target, data, data_type):
+    def add_unit_parameter(self, target_parameter, district_target, building_target, unit_target, data, data_type):
         if district_target == "All" or self.name in district_target:
             if building_target is None:
-                self.add_availability_factor_self(unit_target, data, data_type)
+                self.add_unit_parameter_self(target_parameter, unit_target, data, data_type)
             else:
-                self.add_availability_factor_building(building_target, unit_target, data, data_type)
+                self.add_unit_parameter_building(target_parameter, building_target, unit_target, data, data_type)
 
-    def add_availability_factor_self(self, unit_target, data, data_type):
+    def add_unit_parameter_self(self, target_parameter, unit_target, data, data_type):
         for unit in self.units:
-            unit.add_availability_factor(unit_target, data, data_type)
+            unit.add_unit_parameter(target_parameter, unit_target, data, data_type)
 
-    def add_availability_factor_building(self, building_target, unit_target, data, data_type):
+    def add_unit_parameter_building(self,  target_parameter, building_target, unit_target, data, data_type):
         for building in self.buildings:
-            building.add_availability_factor(building_target, unit_target, data, data_type)
+            building.add_unit_parameter( target_parameter,building_target, unit_target, data, data_type)
 
-    def add_local_demand(self, commodity_target, district_target, building_target, data, data_type):
+    def add_node_parameter(self, target_parameter, district_target, building_target, commodity_target, data, data_type):
         if district_target == "All" or self.name in district_target:
             if building_target is None:
-                self.add_local_demand_self(commodity_target, data, data_type)
+                self.add_node_parameter_self(target_parameter, commodity_target, data, data_type)
             else:
-                self.add_local_demand_building(commodity_target, building_target, data, data_type)
+                self.add_node_parameter_building(target_parameter, building_target, commodity_target, data, data_type)
 
-    def add_local_demand_self(self, commodity_target, data, data_type):
+    def add_node_parameter_self(self, target_parameter, commodity_target, data, data_type):
         for node in self.nodes:
-            node.add_local_demand(commodity_target, data, data_type)
+            node.add_node_parameter(target_parameter, commodity_target, data, data_type)
 
-    def add_local_demand_building(self, commodity_target, building_target, data, data_type):
+    def add_node_parameter_building(self,target_parameter, building_target, commodity_target, data, data_type):
         for building in self.buildings:
-            building.add_local_demand(commodity_target, building_target, data, data_type)
+            building.add_node_parameter(target_parameter, building_target, commodity_target, data, data_type)
 
     def export_json(self, data):
         for item in chain(self.nodes, self.units, self.buildings, self.connections, self.storages):

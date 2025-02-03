@@ -83,15 +83,15 @@ class Building:
                         new_connection.add_direct_parameter("candidate_connections", 1)
                         self.connections.append(new_connection)
 
-    def add_availability_factor(self, building_target, unit_target, data, data_type):
+    def add_unit_parameter(self, target_parameter, building_target, unit_target, data, data_type):
         if building_target == "All" or self.get_name() in building_target:
             for unit in self.units:
-                unit.add_availability_factor(unit_target, data, data_type)
+                unit.add_unit_parameter(target_parameter, unit_target, data, data_type)
 
-    def add_local_demand(self, commodity_target, building_target, data, data_type):
+    def add_node_parameter(self, target_parameter, building_target, commodity_target, data, data_type):
         if building_target == "All" or self.get_name() in building_target:
             for node in self.nodes:
-                node.add_local_demand(commodity_target, data, data_type, self.quantity)
+                node.add_node_parameter(target_parameter, commodity_target, data, data_type, self.quantity)
 
     def set_district_name(self, district_name: str):
         self.district_name = district_name

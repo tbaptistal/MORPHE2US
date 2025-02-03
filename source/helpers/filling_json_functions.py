@@ -28,10 +28,10 @@ def add_parameter_value(data_vector, entity, name_s, tech, data, data_type):
     match data_type:
         case "duration":
             data = {"data": data, "type": data_type}
-        case "datetime":
+        case "date_time":
             data = {"data": data.strftime("%Y-%m-%dT%H:%M:%S"), "type": data_type}
-        case "time_series":
-            data = {"index": data[0], "data": data[1], "type": data_type}
+        # case "time_series":
+        #     data = {"index": data[0], "data": data[1], "type": data_type}
     data_vector["parameter_values"].append([entity, name_s, tech, data, "Base"])
     return data_vector
 
