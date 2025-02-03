@@ -24,15 +24,14 @@ def add_entity(data, entity, name_s):
     data["entity_alternatives"].append([entity, name_s, "Base", True])
     return data
 
-def add_parameter_value(data, entity, name_s, tech, val, type_):
-    if type_ == "duration":
-        val=  {"data": val, "type": "duration"}
-    elif type_ == "datetime":
-        val = {"data": val.strftime("%Y-%m-%dT%H:%M:%S"), "type": "date_time"}
-    elif type_ == "time_series":
-        val = {"index": val[0],
-                "data": val[1],
-               "type": "time_series"}
-    data["parameter_values"].append([entity, name_s, tech, val, "Base"])
-    return data
+def add_parameter_value(data_vector, entity, name_s, tech, data, data_type):
+    match data_type:
+        case "duration":
+            data = {"data": data, "type": data_type}
+        case "datetime":
+            data = {"data": data.strftime("%Y-%m-%dT%H:%M:%S"), "type": data_type}
+        case "time_series":
+            data = {"index": data[0], "data": data[1], "type": data_type}
+    data_vector["parameter_values"].append([entity, name_s, tech, data, "Base"])
+    return data_vector
 
