@@ -125,14 +125,7 @@ venv.bak/
 dmypy.json
 
 
-Templates_json/
-20241118_MORPHE2US.xlsx
-20241120_MORPHE2US.xlsm
-20241203_MORPHE2US.xlsx
-20241204_MORPHE2US.xlsx
-demands/elec_demand.csv
-demands/demand.json
-demands/solar.csv
-demands/heat_demand.csv
+demands/*
 MORPHE2US_packages/*
-demands/example_data.csv
+output.json
+
