@@ -15,6 +15,8 @@ class Connection(Entity):
         data = self.link_nodes(data)
         data = add_entity(data, "connection", self.full_name)
         for key, values in self.direct_parameters.items():
+            # NaM: Not a model (not usable directly in SpineOpt)
+            # "(" refers that the code of the parameter has a specific meaning, here in the method link_nodes
             if not key.startswith("NaM") and "(" not in key:
                 data = add_parameter_value(data, "connection",  self.full_name, key, values["value"], values["type"])
         return data

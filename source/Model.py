@@ -1,5 +1,7 @@
 from source.helpers.filling_json_functions import add_entity, add_parameter_value
 from source.Entity import Entity
+from dataclasses import dataclass, field
+from typing import List
 
 
 
@@ -10,32 +12,30 @@ class Temporal_block(Entity):
     def export_json(self, data: dict, model_name, investment_link = ""):
         data = add_entity(data, "temporal_block", self.name)
         for key, values in self.direct_parameters.items():
+            # NaM: Not a model (not usable directly in SpineOpt)
+            # "(" refers that the code of the parameter has a specific meaning, here in the method link_nodes
             if not key.startswith("NaM") and "(" not in key:
                 data = add_parameter_value(data, "temporal_block", self.name, key, values["value"], values["type"])
         data = add_entity(data, f"model__default_{investment_link}temporal_block", [model_name, self.name])
         return data
-    
-    def has_multiple_occurence(self):
-        if "NaM_occ" in self.direct_parameters.keys():
-            return [True, self.direct_parameters["NaM_occ"]["value"]]
-        return [False, 0]
         
-
-
+@dataclass
 class Model(Entity):
-    def __init__(self):
+    operation_list: List = field(default_factory=list)
+    investment_list: List = field(default_factory=list)
+    modelisation_structure: List = field(default_factory=list)
+    report_list: List = field(default_factory=list)
+
+    def __post_init__(self):
         super().__init__("model")
-        self.operation_list = []
-        self.investment_list = []
-        self.modelisation_structure = None
-        self.report_list = []
 
     def add_modelisation_structure(self, modelisation_structure):
-        self.modelisation_structure = modelisation_structure
+        self.modelisation_structure.append(modelisation_structure)
 
     def export_json(self, data: dict):
-        if self.modelisation_structure is not None:
-            data = self.modelisation_structure.export_json(data)
+        for modelisation_structure in self.modelisation_structure:
+            data = modelisation_structure.export_json(data)
+            
         for report in self.report_list:
             data = report.export_json(data)
             data = add_entity(data, "model__report", [self.name, report.name])
@@ -76,18 +76,20 @@ class Model(Entity):
     def add_investment(self, investment):
         self.investment_list.append(investment)
         
-    
 
+@dataclass
 class Report:
-    def __init__(self, name):
-        self.ouput_list = []
-        self.name = name
+    name: str
+    output_list: List[str] = field(default_factory=list)
 
-    def add_output(self, output):
-        self.ouput_list.append(output)
+    def add_output(self, output: str):
+        self.output_list.append(output)
 
-    def export_json(self, data):
+    def export_json(self, data: dict) -> dict:
         data = add_entity(data, "report", self.name)
-        for output in self.ouput_list:
+        for output in self.output_list:
             data = add_entity(data, "report__output", [self.name, output])
         return data
+
+    def get_output_list_length(self):
+        return len(self.output_list)
