@@ -7,6 +7,7 @@ class Unit(Entity):
 
     def add_unit_parameter(self, target_parameter, unit_target, data, data_type):
         if self.get_name() == unit_target:
+            print(f"Adding parameter {target_parameter} to {self.get_name()}")
             self.add_direct_parameter(target_parameter, data, data_type)
     
     def add_co2(self):
@@ -24,10 +25,6 @@ class Unit(Entity):
         elif self.direct_parameters["NaM_emission"]["value"] < 0:
             self.add_direct_parameter(f"NaM_unit__from_node{from_node+1}", "CO2")
             self.add_direct_parameter(f"fix_ratio_in_in_unit_flow(from_node1from_node{from_node+1})", abs(1/self.direct_parameters["NaM_emission"]["value"]))
-
-
-
-
 
     def export_json(self, data: dict):
         data = add_entity(data, "unit", self.full_name)

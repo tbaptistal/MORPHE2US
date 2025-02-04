@@ -70,11 +70,17 @@ class District:
                         self.connections.append(copy.deepcopy(connection))
 
     def add_unit_parameter(self, target_parameter, district_target, building_target, unit_target, data, data_type):
-        if district_target == "All" or self.name in district_target:
+        if 'All' in district_target or self.name in district_target:
             if building_target is None:
                 self.add_unit_parameter_self(target_parameter, unit_target, data, data_type)
+            elif 'only' in building_target:
+                # If the parameter is set to "only" buildings
+                self.add_unit_parameter_building(target_parameter, building_target, unit_target, data, data_type)
             else:
                 self.add_unit_parameter_building(target_parameter, building_target, unit_target, data, data_type)
+                self.add_unit_parameter_self(target_parameter, unit_target, data, data_type)
+            
+                
 
     def add_unit_parameter_self(self, target_parameter, unit_target, data, data_type):
         for unit in self.units:
@@ -82,13 +88,17 @@ class District:
 
     def add_unit_parameter_building(self,  target_parameter, building_target, unit_target, data, data_type):
         for building in self.buildings:
-            building.add_unit_parameter( target_parameter,building_target, unit_target, data, data_type)
+            building.add_unit_parameter( target_parameter, building_target, unit_target, data, data_type)
 
     def add_node_parameter(self, target_parameter, district_target, building_target, commodity_target, data, data_type):
-        if district_target == "All" or self.name in district_target:
+        if 'All' in district_target or self.name in district_target:
             if building_target is None:
                 self.add_node_parameter_self(target_parameter, commodity_target, data, data_type)
+            elif 'only' in building_target:
+                # Only for buildings
+                self.add_node_parameter_building(target_parameter, commodity_target, data, data_type)
             else:
+                self.add_node_parameter_self(target_parameter, commodity_target, data, data_type)
                 self.add_node_parameter_building(target_parameter, building_target, commodity_target, data, data_type)
 
     def add_node_parameter_self(self, target_parameter, commodity_target, data, data_type):
