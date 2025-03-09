@@ -90,24 +90,24 @@ class District:
         for building in self.buildings:
             building.add_unit_parameter( target_parameter, building_target, unit_target, data, data_type)
 
-    def add_node_parameter(self, target_parameter, district_target, building_target, commodity_target, data, data_type):
+    def add_node_parameter(self, target_parameter, district_target, building_target, commodity_target, data, data_type, quantitative_flag):
         if 'All' in district_target or self.name in district_target:
             if building_target is None:
-                self.add_node_parameter_self(target_parameter, commodity_target, data, data_type)
+                self.add_node_parameter_self(target_parameter, commodity_target, data, data_type, quantitative_flag)
             elif 'only' in building_target:
                 # Only for buildings
-                self.add_node_parameter_building(target_parameter, commodity_target, data, data_type)
+                self.add_node_parameter_building(target_parameter, commodity_target, data, data_type, quantitative_flag)
             else:
-                self.add_node_parameter_self(target_parameter, commodity_target, data, data_type)
-                self.add_node_parameter_building(target_parameter, building_target, commodity_target, data, data_type)
+                self.add_node_parameter_self(target_parameter, commodity_target, data, data_type, quantitative_flag)
+                self.add_node_parameter_building(target_parameter, building_target, commodity_target, data, data_type, quantitative_flag)
 
-    def add_node_parameter_self(self, target_parameter, commodity_target, data, data_type):
+    def add_node_parameter_self(self, target_parameter, commodity_target, data, data_type, quantitative_flag):
         for node in self.nodes:
-            node.add_node_parameter(target_parameter, commodity_target, data, data_type)
+            node.add_node_parameter(target_parameter, commodity_target, data, data_type, quantitative_flag)
 
-    def add_node_parameter_building(self,target_parameter, building_target, commodity_target, data, data_type):
+    def add_node_parameter_building(self,target_parameter, building_target, commodity_target, data, data_type, quantitative_flag):
         for building in self.buildings:
-            building.add_node_parameter(target_parameter, building_target, commodity_target, data, data_type)
+            building.add_node_parameter(target_parameter, building_target, commodity_target, data, data_type, quantitative_flag)
 
     def export_json(self, data):
         for item in chain(self.nodes, self.units, self.buildings, self.connections, self.storages):

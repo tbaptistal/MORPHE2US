@@ -22,6 +22,21 @@ class Entity:
     def add_direct_parameter(self, key: str, data, data_type = None):
         if key == "name":
             self.name = data
+        elif type(data) is str and "=" in data and ";" in data:
+            # This is to handle time series directly in Excel. The format is year=value;year=value;...
+   
+            data = data.split(";")
+            dict_timeserie = {}
+            for i in range(len(data)):
+                year = data[i].split("=")[0]
+                value = data[i].split("=")[1]
+                year_datetime = datetime.datetime(int(year), 1, 1, 0, 0, 0).strftime("%Y-%m-%dT%H:%M:%S")
+                dict_timeserie[year_datetime] = float(value)
+            timeserie_data = {
+                "data": dict_timeserie,
+                "type": "time_series",
+            }
+            self.direct_parameters[key] = {"value": timeserie_data, "type": "time_series"}
         else:
             self.direct_parameters[key] = {"value": data, "type": data_type}
 

@@ -88,10 +88,13 @@ class Building:
             for unit in self.units:
                 unit.add_unit_parameter(target_parameter, unit_target, data, data_type)
 
-    def add_node_parameter(self, target_parameter, building_target, commodity_target, data, data_type):
+    def add_node_parameter(self, target_parameter, building_target, commodity_target, data, data_type, quantitative_flag):
         if building_target == "All" or self.get_name() in building_target:
             for node in self.nodes:
-                node.add_node_parameter(target_parameter, commodity_target, data, data_type, self.quantity)
+                if quantitative_flag:
+                    node.add_node_parameter(target_parameter, commodity_target, data, data_type, self.quantity)
+                else:
+                    node.add_node_parameter(target_parameter, commodity_target, data, data_type)
 
     def set_district_name(self, district_name: str):
         self.district_name = district_name

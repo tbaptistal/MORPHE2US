@@ -57,6 +57,6 @@ class Municipality:
         for district in self.districts:
             district.add_unit_parameter(target_parameter, district_target, building_target, unit_target, data, data_type)
 
-    def add_node_parameter(self, target_parameter, district_target, building_target, commodity_target, data, data_type):
+    def add_node_parameter(self, target_parameter, district_target, building_target, commodity_target, data, data_type, quantitative_flag):
         for district in self.districts:
-            district.add_node_parameter(target_parameter, district_target, building_target, commodity_target, data, data_type)
+            district.add_node_parameter(target_parameter, district_target, building_target, commodity_target, data, data_type, quantitative_flag)

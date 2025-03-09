@@ -6,8 +6,8 @@ class Unit(Entity):
         super().__init__("unit")
 
     def add_unit_parameter(self, target_parameter, unit_target, data, data_type):
-        if self.get_name() == unit_target:
-            print(f"Adding parameter {target_parameter} to {self.get_name()}")
+        if unit_target in self.get_name():
+            # print(f"Adding parameter {target_parameter} to {self.get_name()}")
             self.add_direct_parameter(target_parameter, data, data_type)
     
     def add_co2(self):

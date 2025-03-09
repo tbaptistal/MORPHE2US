@@ -1,0 +1,357 @@
+# User's Guide for MORPHE2US
+
+## Overview
+MORPHE2US - **Municipal Optimization for Renewable Project in Hydrogen & Energy Efficient Utility Solutions** - is an Excel table coupled with a Python script that automatically generates a **SpineOpt** model in the **SpineToolBox**.  
+This guide explains the **Excel component** of MORPHE2US and how to correctly input data.
+
+## Types of Inputs
+Each input field in the Excel sheet will have a specified **type**. Below are the types you may encounter:
+
+- **`string`**: A sequence of characters.
+- **`strings`**: A list of strings. Example: `Scenario1; Scenario2` (*Spacing doesn't matter; `;` is the delimiter*).
+- **`date_time`**: A date in the format: `dd.mm.yyyy hh:mm`.
+- **`float`**: A number (decimal values allowed).
+- **`ints`**: A list of integers. Example: `2025; 2030; 2035` (*Spacing doesn't matter; `;` is the delimiter*).
+- **`bool`**: A `TRUE` or `FALSE` value. A checkbox should already appear in Excel.
+- **`duration`**: A time duration in the format `xX`, where:
+  - `x` is an integer.
+  - `X` is one of: `s` (seconds), `m` (minutes), `h` (hours), `D` (days), `M` (months), `Y` (years).  
+  - Example: `10Y` (10 years).
+- **`timeseries`**: A time series can be entered directly in Excel (not recommended). Instead, we suggest using the `.json` parser.  
+  If entered in Excel, use this format:  
+  `2020=15000; 2025=10000`  
+  → This translates to SpineOpt as:  
+  - `2020-01-01 00:00:00 → 15000`
+  - `2025-01-01 00:00:00 → 10000`
+
+---
+
+## Specifications
+
+### General
+- **`Name`***(string - opt)*
+  The name of the block in the SpineOpt model.
+- **`Start of simulation`***(datetime)*
+  The start date of the simulation.
+- **`End of simulation`***(datetime)*
+  The end date of the simulation.
+
+#### Economic Parameters
+- **`Discount Rate`** *(float / Map)*
+  The discount rate applied to all components in the simulation.  
+  *(Specific technology discount rates can be set in `Unit`, `Connection`, or `Storage`.)*
+- **`Discount Year of Reference`** *(datetime / Map)*
+  The year to which all cash flows are discounted.
+- **`Economic Representation`** *(bool / Map)*
+  If `TRUE`, multi-year investments will be modeled considering discount rates.
+- **`Milestone Years`** *(bool / Map)*
+  If `TRUE`, operational blocks for a milestone year are scaled up to represent the full investment period.
+
+#### Scenario Setup
+- **`Base Scenario name`** *(string - opt)*
+  The base scenario block name in SpineOpt.
+- **`Multiple Scenarios`** *(bool)*
+  Enables multiple scenario blocks, using the **Map** format (see *Types of Inputs*).  
+  Must be used with `Additional Scenario names`.
+- **`Additional Scenario names`** *(strings)*
+  List of additional scenario names to be computed in SpineOpt.
+
+### Operation
+**`Linear operation`** and **`Multi Specific year operation`** are mutually exclusive.  
+If both are `TRUE`, **`Linear operation`** takes priority.
+
+#### Linear Operation
+- **`Linear operation`** *(bool)*
+  If `TRUE`, the model runs from **`Start of simulation`** to **`End of simulation`** using the specified `Resolution`.
+- **`Name`** *(string - opt)*
+  Optional name of the operation block in SpineOpt.
+- **`Resolution`** *(duration / Map)*
+  Defines the resolution of the linear operation.
+
+#### Multi Specific Year Operation
+- **`Multi Specific year operation`** *(bool)*
+  If `TRUE`, the model simulates specific years within the **simulation period**.  
+  _(Not recommended for seasonal storage modeling.)_
+- **`Name`** *(string - opt)*
+  Optional name of the operation block in SpineOpt.
+- **`Resolution`** *(duration / Map)*
+  Common resolution for all operational blocks.
+- **`Specific years to simulate`** *(ints / Map)*
+  List of years to be simulated.
+
+#### Representative Days *(Future Development)*
+- **`Representative days (opt)`** *(bool)*
+  Enables representative days. *(Currently unavailable, but planned in future SpineOpt versions.)*
+
+### Economic - Investments
+MORPHE2US supports **two types of investment models**:
+1. **Single-Time Investment** - Happens once at a user-specified date.
+2. **Multi-Year Investment** - Repeats periodically from a start date.
+
+#### Single-Time Investment
+- **`Single time`** *(bool)*
+  Enables single-time investment.
+- **`Name`***(string - opt)*
+  Optional name of the investment block in SpineOpt.
+- **`Occurrence date`** *(date_time / Map)*
+  Date of the investment.
+
+#### Multi-Year Investment
+- **`Multi year`** *(bool)*
+  Enables multi-year investment.
+- **`Name`***(string - opt)*
+  Optional name of the investment block in SpineOpt.
+- **`1st occurrence date`** *(date_time / Map)*
+  Date of the first investment occurrence.
+- **`Horizon of occurrences`** *(duration / Map)*
+  Time interval between investment cycles.
+
+### CO2 Management
+- **`CO2 node`** *(bool)*
+  If `TRUE`, enables CO2 quantification in the municipality.
+- **`Maximum total CO2 emissions`** *(float / timeseries / Map - opt)*
+  Defines the maximum CO2 emissions over the entire simulation.  
+  _(Can be more complex if using a `Map` or `timeseries` in `.json`.)_
+- **`Maximal emissions (over 1 unit of simulation time)`** *(float / timeseries / Map - opt)*
+Defines the max CO2 emissions per timestep (e.g., `500kg/hour`).
+
+### Examples: 
+Build here examples with values that would make sense for the simulation in a table.
+
+---
+
+## Units
+Defining a unit in the **Excel sheet** does not automatically include it in the model.  
+Each unit must be assigned to a **District** or a **Building** to be included.
+
+### General
+- **`Name`** *(string)*
+Naming convention:
+*Building Level:* `Name` + `district_name` + `B-LVL` + `building_name`
+*District Level:* `Name` + `D-LVL` + `district_name`
+- **`Input commodity x`** *(Excel Data Validation)*
+_Each unit can consume up to 3 commodities._
+- **`Output commodity x`** *(Excel Data Validation)*
+_Each unit can generate up to 3 commodities._
+- **`District / Building scale`** *(Excel Data Validation)*
+_Specifies whether the unit operates at district or building scale._
+- **`CO2 production`** *(float - optional)*
+_Quantity of CO2 produced (positive value) or consumed (negative value) with Input commodity 1 as reference._
+- **`Fixed yearly operation/maintenance costs`** *(float - optional)*
+_Yearly OPEX per kW installed._
+- **`Fixed hourly operation/maintenance costs (SpineOpt)`** *(automatic calculation)*
+_SpineOpt requires hourly OPEX, which Excel calculates automatically._
+
+---
+
+### Investments
+Some parameters are **optional**. If a unit is not intended for investment, these fields can be left blank.
+
+- **`Investment Cost per kW`** *(float - optional)*
+- **`Investment Cost`** *(automatic OR float)*
+- **`Economic lifetime`** *(duration)*
+- **`Technical lifetime`** *(duration)*
+- **`Investment type`** *(Excel Data Validation: Integer/Continuous)*
+_"Continuous" is recommended for better computation performance._
+- **`Investment type (SpineOpt)`** *(automatic calculation)*
+- **`Discount rate (technology specific)`** *(float - optional)*
+- **`Decommissioning cost`** *(float - optional)*
+- **`Decommissioning time`** *(duration - optional)*
+- **`Lead time`** *(duration - optional)*
+_Time required to commission the unit._
+
+---
+
+### Efficiencies  
+Efficiency from **input commodity** to **output commodity**:
+
+- **`Efficiency x → y`** *(float/array)*
+_Defines efficiency. Can be set as an array for operating points._
+
+---
+
+### Capacities
+- **`Capacity INPUT x`** *(float)*
+_Defines input capacity._
+- **`Capacity OUTPUT y`** *(float)*
+_Defines output capacity._
+
+---
+
+### Advanced Parameters (Optional)
+These parameters **fine-tune** unit operation.
+
+#### Costs
+- **`Start-up cost`** *(float)*
+_Cost incurred each time the unit starts up._
+- **`Shutdown cost`** *(float)*
+_Cost incurred each time the unit shuts down._
+- **`Variable fuel costs INPUT x`** *(float)*
+- **`Variable fuel costs OUTPUT y`** *(float)*
+- **`Variable operating costs of INPUT x`** *(float)*
+- **`Variable operating costs of OUTPUT y`** *(float)*
+- **`Procurement cost for reserves`** *(float - not implemented yet)*
+
+#### Time Constraints
+- **`Minimum up time`** *(duration)*
+_Minimum time the unit must stay ON._
+- **`Minimum down time`** *(duration)*
+_Minimum time the unit must stay OFF._
+- **`Ramp up limit OUTPUT y`** *(float)*
+- **`Ramp down limit OUTPUT y`** *(float)*
+
+#### Flow Constraints
+- **`Maximal cumulated unit flow from INPUT x`** *(float)*
+- **`Maximal cumulated unit flow to OUTPUT y`** *(float)*
+- **`Minimal cumulated unit flow from INPUT x`** *(float)*
+- **`Minimal cumulated unit flow to OUTPUT y`** *(float)*
+
+#### Ramping
+- **`Maximum ramp-down of INPUT x`** *(float)*
+- **`Maximum ramp-down of OUTPUT y`** *(float)*
+- **`Maximum ramp up of INPUT x`** *(float)*
+- **`Maximum ramp-up of OUTPUT y`** *(float)*
+---
+
+## Storages
+Defining a storage in the **Excel sheet** does not automatically include it in the model.  
+Each storage must be assigned to a **District** or a **Building** to be included.
+
+In SpineOpt, a storage is modeled as both a **node** and a **unit**.  
+Storages can **only store one commodity at a time**.
+
+---
+
+### General
+- **`Name`** *(string)*
+_Naming convention:_  
+  *Building Level:* `Name` + `district_name` + `B-LVL` + `building_name`  
+  *District Level:* `Name` + `D-LVL` + `district_name`
+- **`Commodity`** *(Excel Data Validation)*
+_Specifies the commodity stored._  
+- **`District / Building scale`** *(Excel Data Validation)*
+_Specifies whether the storage operates at district or building scale._  
+- **`Capacity`** *(float)*
+_Maximum storage capacity._  
+- **`Efficiency to storage`** *(float)*
+_Efficiency when storing the commodity._  
+- **`Efficiency from storage`** *(float)*
+_Efficiency when retrieving the commodity._  
+- **`Self-discharge`** *(float - optional)*
+_Represents storage losses over time._  
+- **`Initial storage level`** *(float - optional)*
+_Defines the initial stored quantity._  
+- **`Fixed yearly operation/maintenance costs`** *(float - optional)*
+_Yearly OPEX per unit of capacity._  
+- **`Fixed hourly operation/maintenance costs (SpineOpt)`** *(automatic calculation)*
+_SpineOpt requires hourly OPEX, which Excel calculates automatically._  
+
+---
+
+### Rating Power
+- **`Capacity INPUT`** *(float)*
+_Defines the maximum charge rate._  
+- **`Capacity OUTPUT`** *(float)*
+_Defines the maximum discharge rate._  
+
+---
+
+### Investments
+Some parameters are **optional**. If a storage is not intended for investment, these fields can be left blank.
+
+- **`Investment Cost per kWh`** *(float - optional)*
+- **`Investment Cost`** *(automatic OR float)*
+- **`Economic lifetime`** *(duration)*
+- **`Technical lifetime`** *(duration)*
+- **`Investment type`** *(Excel Data Validation: Integer/Continuous)*
+_"Continuous" is recommended for better computation performance._  
+- **`Investment type (SpineOpt)`** *(automatic calculation)*
+- **`Discount rate (technology specific)`** *(float - optional)*
+- **`Decommissioning cost`** *(float - optional)*
+- **`Decommissioning time`** *(duration - optional)*
+- **`Lead time`** *(duration - optional)*
+_Time required to commission the storage._  
+
+---
+
+### Advanced Parameters (Optional)
+These parameters **fine-tune** storage operation.
+
+#### Costs
+- **`Start-up cost`** *(float - optional)*
+_Cost incurred each time the storage starts charging._  
+- **`Shutdown cost`** *(float - optional)*
+_Cost incurred each time the storage stops discharging._  
+
+#### Time Constraints
+- **`Minimum up time`** *(duration - optional)*
+_Minimum time the storage must stay active._  
+- **`Minimum down time`** *(duration - optional)*
+_Minimum time the storage must stay inactive._  
+
+#### Ramping
+- **`Ramp up limit (INPUT)`** *(float - optional)*
+- **`Ramp down limit (INPUT)`** *(float - optional)*
+- **`Ramp up limit (OUTPUT)`** *(float - optional)*
+- **`Ramp down limit (OUTPUT)`** *(float - optional)*
+
+## Connections
+Defining a connection in the **Connection Excel sheet** does not automatically include it in the model.  
+Each connection must be assigned in the **Commodities sheet**.
+
+Connections represent the transfer of a **commodity** between different locations or components in the model. 
+
+---
+
+### General
+- **`Name`** *(string)*
+_Report here the naming convention for connection_  
+- **`Commodity`** *(Excel Data Validation)*
+_Specifies the commodity being transferred._  
+- **`Type`** *(Excel Data Validation)*
+_Defines the type of connection (e.g., Lossless Bidirectional,	normal)._  
+- **`Efficiency`** *(float)*
+_Represents losses or conversion factors during transfer._  
+
+---
+
+### Investments
+Some parameters are **optional**. If a connection is not intended for investment, these fields can be left blank.
+
+- **`Investment Cost per unit length`** *(float - optional)*
+- **`Investment Cost`** *(automatic OR float)*
+- **`Economic lifetime`** *(duration)*
+- **`Technical lifetime`** *(duration)*
+- **`Investment type`** *(Excel Data Validation: Integer/Continuous)*
+_"Continuous" is recommended for better computation performance._  
+- **`Discount rate (technology specific)`** *(float - optional)*
+- **`Decommissioning cost`** *(float - optional)*
+- **`Decommissioning time`** *(duration - optional)*
+- **`Lead time`** *(duration - optional)*
+_Time required to commission the connection._  
+
+
+## Building
+Building type are registered in the **Building Excel sheet** using:
+- **`name`**
+- **`type`**
+- **`date of construction`**
+
+Only the name is used as a reference to this building type in the model. Load shapes (timeseries) are to be registered directly in the .json according to the afforementioned format.
+The pre-existing utilities for the specific building (heating system, rooftop pv...) are to be specified in the **District Excel sheet**.
+
+### Retrofits
+**Demand timeseries** can't be modified directly in SpineOpt if the model invested in retrofit. To pass through this, retrofit are done using **connection entities** 
+
+- **`Name`**
+Name of the retrofit. The naming convention is ... 
+- **`Commodity`**
+The commodity 
+- **`Decrease in consumption [%]`**
+The decrease in consumption. Example: Smart lightning would reduce by 8% of total electricity demand. Led would reduce by 4%. All smart appliances would reduce by 12%.
+- **`Price for 1 building [CHF]`**
+Should check again if that's true. 
+
+
+To do: 
+Commodities / Building Types / Districts / Report
