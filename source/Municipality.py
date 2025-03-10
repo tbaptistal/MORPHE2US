@@ -37,12 +37,12 @@ class Municipality:
     def add_district_interconnection(self, connection, commodity, district_from_name, district_to_name):
         # Add connection between two districts
         for district in self.districts:
-            if district.get_name() == district_to_name or (district_to_name == "All" and district.get_name() != district_from_name):
+            if district.get_name() == district_to_name: # or (district_to_name == "All" and district.get_name() != district_from_name):
                 for node in district.nodes:
                     if node.name == commodity:
                         connection.set_node_to(node)
                 for district in self.districts:
-                    if district.get_name() == district_from_name or (district_from_name == "All" and district.get_name() != district_to_name):
+                    if district.get_name() == district_from_name:#  or (district_from_name == "All" and district.get_name() != district_to_name):
                         for node in district.nodes:
                             if node.get_name() == commodity:
                                 connection.set_node_from(node)

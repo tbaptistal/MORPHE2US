@@ -119,6 +119,53 @@ Defines the max CO2 emissions per timestep (e.g., `500kg/hour`).
 Build here examples with values that would make sense for the simulation in a table.
 
 ---
+## Commodities
+Commidities such as gas, electricity, hot water, space heating, hydrogen, water, heating oil, wood, wood pellet, or any other commodities are to be declared in the  **Excel sheet Commidities**.
+The **`name`** of the commidity has to be declared as general. Each commodity will have nodes at building and district level. These nodes could be interconnected thanks to a **Connection** (see **Excel sheet Connections**).
+2 other parameters are to be specified: 
+**`Allow commodity overflow (lost cost)`**
+It will creates **Overflow unit** that allow overflow of the commodity to flow outside of the model. All of the overflow is then quantified in the **Overflow unit** and can be seen in the results panel.
+**`Supply node (with an infinite capacity of import)`**
+A supply node with infinite capacity of import/export will act as a node with unlimited capacity of such commodity. 
+Example: Gas isn't a supply node as we have to model a gas network (same for electricity). Concerning wood or heating oil, we can model them as supply node. It means that there is no network (to manage and/or simulate). A building-level unit that will consume such commodity and produce heat will just pump the commodity in the same building level supply node.
+
+### Linking connections
+After declaring the connections in the **Excel sheet Connections**, you can instantiate a specific number of connections (existing or to be available for investment) in the same **Excel sheet Commidities**.
+The declaration of a new connection is as follow:
+#### General
+Connection from district-level to district-level and from district-level to building-level are available.
+
+**`Connection's name`**
+The name of the connections which is defined directly in the **Excel sheet Connections**. If not, then check in the Data Validation from Excel if the name of the connection is correctly linked.
+
+**`Number of connections`**
+The initial quantity of connection already in used.
+**`Candidate connections`**
+The quantity of connections in which the model is allowed to invest.
+#### From node
+**`District level`**
+From which district the connection is coming from.
+**`Building level`**
+From which building the connection is coming from. 
+If not specified, then the connection is starting from the district directly at district level.
+"All" can be written as argument of this parameter. It allows to link all the building of a district to a district level. The code will generate 1 entity of connection for each type of building going to the district level.
+**`Capacity`**
+The maximum capacity for 1 connection. 
+**`Flow Cost`**
+The flow cost for 1 connection (CHF/kWh or any other currency or unit flow used in the model)
+#### To node
+**`District level`**
+To which district the connection is going to.
+**`Building level`**
+To which building the connection is going to. 
+If not specified, then the connection is finishing in the district directly at district level.
+"All" can be written as argument of this parameter. It allows to link all the building of a district to a district level. The code will generate 1 entity of connection for each type of building going to the district level.
+**`Capacity`**
+Check above.
+**`Flow Cost`**
+Check above.
+
+---
 
 ## Units
 Defining a unit in the **Excel sheet** does not automatically include it in the model.  
@@ -312,6 +359,9 @@ _Specifies the commodity being transferred._
 _Defines the type of connection (e.g., Lossless Bidirectional,	normal)._  
 - **`Efficiency`** *(float)*
 _Represents losses or conversion factors during transfer._  
+- **`Length (not used in the model)`**
+The total length of the connection. Parameter not used in the model. 
+
 
 ---
 
@@ -319,6 +369,7 @@ _Represents losses or conversion factors during transfer._
 Some parameters are **optional**. If a connection is not intended for investment, these fields can be left blank.
 
 - **`Investment Cost per unit length`** *(float - optional)*
+Could be used to define **`Investment Cost`** automatically using a formula with the **`length`** parameter.
 - **`Investment Cost`** *(automatic OR float)*
 - **`Economic lifetime`** *(duration)*
 - **`Technical lifetime`** *(duration)*
@@ -331,7 +382,7 @@ _"Continuous" is recommended for better computation performance._
 _Time required to commission the connection._  
 
 
-## Building
+## Building types
 Building type are registered in the **Building Excel sheet** using:
 - **`name`**
 - **`type`**
@@ -346,12 +397,30 @@ The pre-existing utilities for the specific building (heating system, rooftop pv
 - **`Name`**
 Name of the retrofit. The naming convention is ... 
 - **`Commodity`**
-The commodity 
+The commodity in which the retrofit is acting.
 - **`Decrease in consumption [%]`**
 The decrease in consumption. Example: Smart lightning would reduce by 8% of total electricity demand. Led would reduce by 4%. All smart appliances would reduce by 12%.
 - **`Price for 1 building [CHF]`**
 Should check again if that's true. 
 
 
-To do: 
-Commodities / Building Types / Districts / Report
+## District
+District are defined in the **District Excel sheet**. This sheet (and the **Commodities Excel sheet**) are the ones which should be updated for each new municipalities. The other **Excel sheets (units, storages, connections, Specifications and Report)** are general sheet and are just defining general components. The **Building type Excel sheet** could be adapted to each municipality but could also be re-used at the user's preferences.
+
+First, each district which should be incorporated within the model has to be named.
+Then, for each district, the **`Quantity of building`** from the **`Building types`** are to be specified. It will determine the load demand for each node at district level (all building with the same building type at a district level are aggregated).
+
+The user has then to fill all of the tables: 
+- _**`Units presence (district level)`**_
+- _**`Units presence (building level)`**_
+- _**`Storages presence (district level)`**_
+- _**`Storages presence (building level)`**_
+
+Each unit/storage should appear directly in the good category according to whether it's available in building or in district level. 
+Each unit/storage should be filled with **`number of units`** and **`candidate units`** (blue zone). If a unit/storage isn't filled (or with both 0 for **`number of units`** and **`candidate units`**), then the unit/storage won't appear in the model for the specified building type in the specified district (building level) or specified district (district level).
+
+
+
+
+## Report
+Report can be created in the **Report Excel sheet**. Outputs can be assigned to a specific report. Each output are already generated by the template from SpineOpt within the SpineToolBox.
