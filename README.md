@@ -1,8 +1,52 @@
-# User's Guide for MORPHE2US
+# **MORPHE2US User Guide**  
 
-## Overview
+## **Table of Contents**  
+- [Introduction](#introduction)  
+  - [System Requirements](#system-requirements)  
+  - [System Overview](#system-overview)
+- [Types of inputs](#types-of-inputs)
+- [MORPHE2US Excel file](#morphe2us-excel-file)
+  - [Specifications](#specifications)
+  - [Commodities](#commodities)
+  - [Units](#units)
+  - [Storages](#storages)
+  - [Connections](#connections)
+  - [Building types](#building-types)
+  - [Districts](#district)
+  - [Reports](#report)
+- [Key Features](#key-features)  
+- [Using MORPHE2US](#using-morphe2us)  
+
+---
+
+## **Introduction**  
+Welcome to **MORPHE2US**, a powerful and intuitive techno-economic model designed to *inform and help municipalities in their energy investments to reach net 0 by 2050*. The model's main goal is to follow the 7th Sustainable Development Goal from United Nations: **“affordable, reliable, sustainable and modern energy for all”**
+
+This guide will help you set up, navigate, and maximize your use of MORPHE2US.  
+
 MORPHE2US - **Municipal Optimization for Renewable Project in Hydrogen & Energy Efficient Utility Solutions** - is an Excel table coupled with a Python script that automatically generates a **SpineOpt** model in the **SpineToolBox**.  
-This guide explains the **Excel component** of MORPHE2US and how to correctly input data.
+
+---
+
+### **System Requirements**  
+Before installing MORPHE2US, ensure your system meets the following requirements: 
+
+- **Operating System:** *No specifications*  
+- **Processor:** *Could specify the computation time with the processor type*  
+- **RAM:** *Could specify the computation time with the RAM size*   
+- **SpineOpt:** *Required*
+- **SpineToolBox:** *Required*  
+
+---
+
+### **System Overview**  
+MORPHE2US consists of the following core components:  
+
+- **Excel sheet:** Provides an overview of the municipality to model.  
+- **Python pipeline:** Python code that will *translate* the model in the Excel sheet and the input datas coming from a .json file into a workable SpineToolBox file.  
+
+
+---
 
 ## Types of Inputs
 Each input field in the Excel sheet will have a specified **type**. Below are the types you may encounter:
@@ -24,8 +68,9 @@ Each input field in the Excel sheet will have a specified **type**. Below are th
   - `2020-01-01 00:00:00 → 15000`
   - `2025-01-01 00:00:00 → 10000`
 
----
-
+--- 
+## MORPHE2US Excel file
+This guide explains the **Excel component** of MORPHE2US and how to correctly input data.
 ## Specifications
 
 ### General
@@ -113,14 +158,15 @@ MORPHE2US supports **two types of investment models**:
   Defines the maximum CO2 emissions over the entire simulation.  
   _(Can be more complex if using a `Map` or `timeseries` in `.json`.)_
 - **`Maximal emissions (over 1 unit of simulation time)`** *(float / timeseries / Map - opt)*
-Defines the max CO2 emissions per timestep (e.g., `500kg/hour`).
+Defines the max CO2 emissions per timestep. It allows the user to set an upper boundary, e.g., `500kg/hour` of CO2.
 
 ### Examples: 
 Build here examples with values that would make sense for the simulation in a table.
 
 ---
+
 ## Commodities
-Commidities such as gas, electricity, hot water, space heating, hydrogen, water, heating oil, wood, wood pellet, or any other commodities are to be declared in the  **Excel sheet Commidities**.
+Commodities such as gas, electricity, hot water, space heating, hydrogen, water, heating oil, wood, wood pellet, or any other commodities are to be declared in the  **Excel sheet Commodities**.
 The **`name`** of the commidity has to be declared as general. Each commodity will have nodes at building and district level. These nodes could be interconnected thanks to a **Connection** (see **Excel sheet Connections**).
 2 other parameters are to be specified: 
 **`Allow commodity overflow (lost cost)`**
@@ -130,7 +176,7 @@ A supply node with infinite capacity of import/export will act as a node with un
 Example: Gas isn't a supply node as we have to model a gas network (same for electricity). Concerning wood or heating oil, we can model them as supply node. It means that there is no network (to manage and/or simulate). A building-level unit that will consume such commodity and produce heat will just pump the commodity in the same building level supply node.
 
 ### Linking connections
-After declaring the connections in the **Excel sheet Connections**, you can instantiate a specific number of connections (existing or to be available for investment) in the same **Excel sheet Commidities**.
+After declaring the connections in the **Excel sheet Connections**, you can instantiate a specific number of connections (existing or to be available for investment) in the same **Excel sheet Commodities**.
 The declaration of a new connection is as follow:
 #### General
 Connection from district-level to district-level and from district-level to building-level are available.
@@ -161,9 +207,9 @@ To which building the connection is going to.
 If not specified, then the connection is finishing in the district directly at district level.
 "All" can be written as argument of this parameter. It allows to link all the building of a district to a district level. The code will generate 1 entity of connection for each type of building going to the district level.
 **`Capacity`**
-Check above.
+See 'Capacity' definition above for reference.
 **`Flow Cost`**
-Check above.
+See 'Flow Cost' definition above for reference.
 
 ---
 
@@ -388,7 +434,7 @@ Building type are registered in the **Building Excel sheet** using:
 - **`type`**
 - **`date of construction`**
 
-Only the name is used as a reference to this building type in the model. Load shapes (timeseries) are to be registered directly in the .json according to the afforementioned format.
+Only the name is used as a reference to this building type in the model. Load shapes (timeseries) are to be registered directly in the .json according to the aforementioned format.
 The pre-existing utilities for the specific building (heating system, rooftop pv...) are to be specified in the **District Excel sheet**.
 
 ### Retrofits
@@ -399,10 +445,15 @@ Name of the retrofit. The naming convention is ...
 - **`Commodity`**
 The commodity in which the retrofit is acting.
 - **`Decrease in consumption [%]`**
-The decrease in consumption. Example: Smart lightning would reduce by 8% of total electricity demand. Led would reduce by 4%. All smart appliances would reduce by 12%.
+The decrease in consumption. Example: Smart lighting would reduce by 8% of total electricity demand. Led would reduce by 4%. All smart appliances would reduce by 12%.
 - **`Price for 1 building [CHF]`**
-Should check again if that's true. 
-
+WARNING
+WARNING
+WARNING
+Should check again if that's true. WARNING
+WARNING
+WARNING
+WARNING
 
 ## District
 District are defined in the **District Excel sheet**. This sheet (and the **Commodities Excel sheet**) are the ones which should be updated for each new municipalities. The other **Excel sheets (units, storages, connections, Specifications and Report)** are general sheet and are just defining general components. The **Building type Excel sheet** could be adapted to each municipality but could also be re-used at the user's preferences.
@@ -420,7 +471,31 @@ Each unit/storage should appear directly in the good category according to wheth
 Each unit/storage should be filled with **`number of units`** and **`candidate units`** (blue zone). If a unit/storage isn't filled (or with both 0 for **`number of units`** and **`candidate units`**), then the unit/storage won't appear in the model for the specified building type in the specified district (building level) or specified district (district level).
 
 
-
-
 ## Report
 Report can be created in the **Report Excel sheet**. Outputs can be assigned to a specific report. Each output are already generated by the template from SpineOpt within the SpineToolBox.
+
+
+---
+
+## **Key Features**  
+- **Feature 1:** *[Brief description & add an image to illustrate]*  
+- **Feature 2:** *[Brief description & add an image to illustrate]*  
+- **Feature 3:** *[Brief description & add an image to illustrate]*  
+- **Feature 4:** *[Brief description & add an image to illustrate]*
+
+---
+
+
+## **Using MORPHE2US**
+... 
+### **Creating a New Project**
+#### **Creating a New Municipality**
+... 
+#### **Creating a New Scenario with the same Municipality**
+... 
+
+### **Saving & Exporting**
+... 
+
+### Debugging the python pipeline
+... 

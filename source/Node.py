@@ -25,3 +25,6 @@ class Node(Entity):
                 else: 
                     print(data)           
             self.add_direct_parameter(target_parameter, data, data_type)
+
+    def get_value(self, parameter):
+        return self.direct_parameters[parameter]
