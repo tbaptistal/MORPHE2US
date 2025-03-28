@@ -60,7 +60,8 @@ class Building:
                 if "demand" in new_node.direct_parameters:
                     old_demand = new_node.get_value("demand")
                     node.add_direct_parameter("demand", 0)
-                   
+                else:
+                    continue
                 new_node.set_name(f"Retrofit_{node.get_name()}")
                 self.nodes.append(new_node)
                 
