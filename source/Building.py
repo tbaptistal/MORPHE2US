@@ -79,7 +79,7 @@ class Building:
                         new_connection.set_node_from(node)
                         new_connection.set_node_to(new_node)
                         new_connection.add_direct_parameter("connection_investment_cost", retrofit.price)
-                        new_connection.add_direct_parameter("connection_investment_variable_type", "connection_investment_variable_type_integer", "string")
+                        new_connection.add_direct_parameter("connection_investment_variable_type", "connection_investment_variable_type_continuous", "string")
                         if (1 - retrofit.decrease_to_normal) == 0:
                             raise ValueError("The retrofit cannot cancel out a demand: Here the decrease_to_normal is 100%")
                         ratio = 1 / (1 - retrofit.decrease_to_normal)
@@ -96,6 +96,8 @@ class Building:
         if building_target == "All" or self.get_name() in building_target:
             for unit in self.units:
                 unit.add_unit_parameter(target_parameter, unit_target, data, data_type)
+            for storage in self.storages:
+                storage.add_storage_parameter(target_parameter, unit_target, data, data_type)
 
     def add_node_parameter(self, target_parameter, building_target, commodity_target, data, data_type, quantitative_flag):
         if building_target == "All" or self.get_name() in building_target:

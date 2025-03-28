@@ -48,7 +48,7 @@ class District:
                 connection.set_node_from(node)
 
         for building in self.buildings:
-            if building.get_name() == building_name or (building_name == "All" and building.get_name() != building_name):
+            if building.get_name() in building_name or (building_name == "All" and building.get_name() not in building_name):
                 for node in building.nodes:
                     if node.name == commodity:
                         connection.set_node_to(node)
@@ -61,7 +61,7 @@ class District:
                 connection.set_node_to(node)
 
         for building in self.buildings:
-            if building.get_name() == building_name or (building_name == "All" and building.get_name() != building_name):
+            if building.get_name() in building_name or (building_name == "All" and building.get_name() not in building_name):
                 for node in building.nodes:
                     if node.name == commodity:
                         connection.set_node_from(node)
@@ -84,6 +84,9 @@ class District:
     def add_unit_parameter_self(self, target_parameter, unit_target, data, data_type):
         for unit in self.units:
             unit.add_unit_parameter(target_parameter, unit_target, data, data_type)
+        
+        for storage in self.storages:
+            storage.add_storage_parameter(target_parameter, unit_target, data, data_type)
 
     def add_unit_parameter_building(self,  target_parameter, building_target, unit_target, data, data_type):
         for building in self.buildings:

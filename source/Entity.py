@@ -22,7 +22,9 @@ class Entity:
     def add_direct_parameter(self, key: str, data, data_type = None):
         if key == "name":
             self.name = data
-        elif type(data) is str and "=" in data and ";" in data:
+        elif data_type == "Special":
+            self.direct_parameters[key] = {"value": data, "type": "string_special"}
+        elif type(data) is str and "=" in data:
             # This is to handle time series directly in Excel. The format is year=value;year=value;...
    
             data = data.split(";")
@@ -43,6 +45,11 @@ class Entity:
     def get_name(self):
         return self.name
     
-
+    def has_investment(self):
+        # If at least one parameter in direct_parameters.keys() contains the word "investment", then the entity has an investment
+        for key in self.direct_parameters.keys():
+            if "investment_econ_lifetime" in key:
+                return True
+        return False
 
 

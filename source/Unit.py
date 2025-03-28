@@ -32,9 +32,9 @@ class Unit(Entity):
         dict__link_nodes = {}
         for parameter in self.direct_parameters:
             if parameter.startswith("NaM_unit__"):
-                dict__link_nodes[parameter.split("NaM_")[1]] = f"{self.direct_parameters[parameter]["value"]}{self.location_name}"
-                entity_name = f"{parameter.split("NaM_")[1].split('node')[0]}node"
-                entity_linked_to = f"{self.direct_parameters[parameter]["value"]}{self.location_name}"
+                dict__link_nodes[parameter.split("NaM_")[1]] = f'{self.direct_parameters[parameter]["value"]}{self.location_name}'
+                entity_name = f'{parameter.split("NaM_")[1].split("node")[0]}node'
+                entity_linked_to = f'{self.direct_parameters[parameter]["value"]}{self.location_name}'
                 data = add_entity(data, entity_name , [self.full_name, entity_linked_to])
         to_node = len([key for key in dict__link_nodes if key.startswith("unit__to_node")])
         from_node = len([key for key in dict__link_nodes if key.startswith("unit__from_node")])

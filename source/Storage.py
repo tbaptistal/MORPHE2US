@@ -37,7 +37,7 @@ class Storage(Entity):
                         data = add_parameter_value(data, "unit", self.full_name, f"unit{key.split("(")[0]}", values["value"], values["type"])
                         data = add_parameter_value(data, "node", self.full_name, f"storage{key.split("(")[0]}", 0, "float")
                     case key if "(unit_and_node)" in key:
-                        if values["type"] == "string_special":
+                        if values["type"] == "autofill_string":
                             data = add_parameter_value(data, "unit", self.full_name, f"unit{key.split("(")[0]}", f"unit{values['value']}", values["type"])
                             data = add_parameter_value(data, "node", self.full_name, f"storage{key.split("(")[0]}", f"storage{values['value']}", values["type"])
                         else:
@@ -57,3 +57,8 @@ class Storage(Entity):
                     case _:
                         print(f"Error, key {key} not recognized in Storage")
         return data
+    
+
+    def add_storage_parameter(self, target_parameter, unit_target, data, data_type):
+        if unit_target in self.get_name():
+            self.add_direct_parameter(target_parameter, data, data_type)
