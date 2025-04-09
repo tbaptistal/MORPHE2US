@@ -15,6 +15,45 @@ class Unit(Entity):
         to_node = len([parameter for parameter in self.direct_parameters if parameter.startswith("NaM_unit__to_node")])
         if "NaM_emission" not in self.direct_parameters:
             return
+        
+
+        if type(self.direct_parameters["NaM_emission"]["value"]) is dict:
+            CO2_emissions = list(self.direct_parameters["NaM_emission"]["value"]["data"].values())
+            # Check if all values are positive or negative
+            if all(value >= 0 for value in CO2_emissions): # Check if all values are positive
+                print(f"Positive emissions for {self.get_name()}: {CO2_emissions}")
+                self.add_direct_parameter(f"NaM_unit__to_node{to_node+1}", "CO2")
+                if from_node == 0:
+                    for key in self.direct_parameters["NaM_emission"]["value"]["data"].keys():
+                        if self.direct_parameters["NaM_emission"]["value"]["data"][key] == 0:
+                            self.direct_parameters["NaM_emission"]["value"]["data"][key] = 0
+                        else:
+                            self.direct_parameters["NaM_emission"]["value"]["data"][key] = abs(1/self.direct_parameters["NaM_emission"]["value"]["data"][key])
+                    self.add_direct_parameter(f"fix_ratio_out_out_unit_flow(to_node1to_node{to_node+1})", self.direct_parameters["NaM_emission"]["value"])
+                else:
+                    self.add_direct_parameter(f"fix_ratio_out_in_unit_flow(from_node1to_node{to_node+1})", self.direct_parameters["NaM_emission"]["value"])
+
+
+            elif all(value <= 0 for value in CO2_emissions): # Check if all values are negative
+                print(f"Negative emissions for {self.get_name()}: {CO2_emissions}")
+                self.add_direct_parameter(f"NaM_unit__from_node{from_node+1}", "CO2")
+                for key in self.direct_parameters["NaM_emission"]["value"]["data"].keys():
+                    if self.direct_parameters["NaM_emission"]["value"]["data"][key] == 0:
+                            self.direct_parameters["NaM_emission"]["value"]["data"][key] = 0
+                    else:
+                        self.direct_parameters["NaM_emission"]["value"]["data"][key] = abs(1/self.direct_parameters["NaM_emission"]["value"]["data"][key])
+                self.add_direct_parameter(f"fix_ratio_in_in_unit_flow(from_node1from_node{from_node+1})", self.direct_parameters["NaM_emission"]["value"])
+
+
+
+
+            else:
+                print(f"Warning: Mixed emissions for {self.get_name()}: {CO2_emissions}")
+                print("Please check the values: The model can't handle positive & negative emissions for the same unit.")
+            
+            return
+
+
         if self.direct_parameters["NaM_emission"]["value"] > 0:
             # Generate CO2 (to node) -> Check if there is a unit_from_node (to link it to the CO2)
             self.add_direct_parameter(f"NaM_unit__to_node{to_node+1}", "CO2")
