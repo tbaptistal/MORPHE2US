@@ -5,6 +5,7 @@ from itertools import chain
 
 @dataclass
 class District:
+    # Represents a district with its associated nodes, units, buildings, connections, and storages.
     name: str
     nodes: List = field(default_factory=list)
     units: List = field(default_factory=list)
@@ -13,28 +14,35 @@ class District:
     storages: List = field(default_factory=list)
 
     def add_unit(self, unit):
+        # Adds a unit to the district and sets its location name.
         unit.set_location_name(f"_D-LVL_{self.name}")
         self.units.append(unit)
 
     def add_node(self, node):
+        # Adds a node to the district and sets its location name.
         node.set_location_name(f"_D-LVL_{self.name}")
         self.nodes.append(node)
 
     def add_building(self, building):
+        # Adds a building to the district and sets its district name.
         building.set_district_name(f"{self.name}")
         self.buildings.append(building)
 
     def add_storage(self, storage):
+        # Adds a storage to the district and sets its location name.
         storage.set_location_name(f"_D-LVL_{self.name}")
         self.storages.append(storage)
 
     def get_name(self):
+        # Returns the name of the district.
         return self.name
 
     def add_connection(self, connection):
+        # Adds a connection to the district.
         self.connections.append(connection)
 
     def add_building_connection(self, connection, commodity, building_name, flag_direction_building="to"):
+        # Adds a connection to/from a building based on the specified direction.
         if flag_direction_building == "from":
             self.add_building_connection_from(connection, commodity, building_name)
         elif flag_direction_building == "to":
@@ -43,6 +51,7 @@ class District:
             print("Error: Wrong flag_direction_building")
 
     def add_building_connection_to(self, connection, commodity, building_name):
+        # Adds a connection to a building for a specific commodity.
         for node in self.nodes:
             if node.name == commodity:
                 connection.set_node_from(node)
@@ -56,6 +65,7 @@ class District:
                         self.connections.append(copy.deepcopy(connection))
 
     def add_building_connection_from(self, connection, commodity, building_name):
+        # Adds a connection from a building for a specific commodity.
         for node in self.nodes:
             if node.name == commodity:
                 connection.set_node_to(node)
@@ -69,50 +79,46 @@ class District:
                         self.connections.append(copy.deepcopy(connection))
 
     def add_unit_parameter(self, target_parameter, district_target, building_target, unit_target, data, data_type):
+        # Adds a parameter to units in the district or its buildings based on the target.
         if 'All' in district_target or self.name in district_target:
             if building_target is None:
                 self.add_unit_parameter_self(target_parameter, unit_target, data, data_type)
-            # elif 'only' in building_target:
-            #     # If the parameter is set to "only" buildings
-            #     self.add_unit_parameter_building(target_parameter, building_target, unit_target, data, data_type)
             else:
                 self.add_unit_parameter_building(target_parameter, building_target, unit_target, data, data_type)
-                # self.add_unit_parameter_self(target_parameter, unit_target, data, data_type)
-            
-                
 
     def add_unit_parameter_self(self, target_parameter, unit_target, data, data_type):
+        # Adds a parameter to units and storages directly in the district.
         for unit in self.units:
             unit.add_unit_parameter(target_parameter, unit_target, data, data_type)
         
         for storage in self.storages:
             storage.add_storage_parameter(target_parameter, unit_target, data, data_type)
 
-    def add_unit_parameter_building(self,  target_parameter, building_target, unit_target, data, data_type):
+    def add_unit_parameter_building(self, target_parameter, building_target, unit_target, data, data_type):
+        # Adds a parameter to units in the buildings of the district.
         for building in self.buildings:
-            building.add_unit_parameter( target_parameter, building_target, unit_target, data, data_type)
+            building.add_unit_parameter(target_parameter, building_target, unit_target, data, data_type)
 
     def add_node_parameter(self, target_parameter, district_target, building_target, commodity_target, data, data_type, quantitative_flag):
+        # Adds a parameter to nodes in the district or its buildings based on the target.
         if 'All' in district_target or self.name in district_target:
             if building_target is None:
                 self.add_node_parameter_self(target_parameter, commodity_target, data, data_type, quantitative_flag)
-            # elif 'only' in building_target:
-            #     # Only for buildings
-            #     self.add_node_parameter_building(target_parameter, commodity_target, data, data_type, quantitative_flag)
             else:
                 self.add_node_parameter_building(target_parameter, building_target, commodity_target, data, data_type, quantitative_flag)
-                # self.add_node_parameter_self(target_parameter, commodity_target, data, data_type, quantitative_flag)
-                
 
     def add_node_parameter_self(self, target_parameter, commodity_target, data, data_type, quantitative_flag):
+        # Adds a parameter to nodes directly in the district.
         for node in self.nodes:
             node.add_node_parameter(target_parameter, commodity_target, data, data_type, quantitative_flag)
 
-    def add_node_parameter_building(self,target_parameter, building_target, commodity_target, data, data_type, quantitative_flag):
+    def add_node_parameter_building(self, target_parameter, building_target, commodity_target, data, data_type, quantitative_flag):
+        # Adds a parameter to nodes in the buildings of the district.
         for building in self.buildings:
             building.add_node_parameter(target_parameter, building_target, commodity_target, data, data_type, quantitative_flag)
 
     def export_json(self, data):
+        # Exports the district's data to JSON format by aggregating data from all components.
         for item in chain(self.nodes, self.units, self.buildings, self.connections, self.storages):
             data = item.export_json(data)
         return data

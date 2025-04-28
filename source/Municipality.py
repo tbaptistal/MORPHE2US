@@ -2,17 +2,20 @@ import copy
 from itertools import chain
 from dataclasses import dataclass, field
 from typing import List
+
 @dataclass
 class Municipality:
     name: str
-    districts: List = field(default_factory=list)
-    nodes: List = field(default_factory=list)
-    connections: List = field(default_factory=list)
+    districts: List = field(default_factory=list)  # List of districts in the municipality
+    nodes: List = field(default_factory=list)  # List of nodes in the municipality
+    connections: List = field(default_factory=list)  # List of connections in the municipality
 
     def add_district(self, district):
+        # Add a district to the municipality.
         self.districts.append(district)
 
     def export_json(self, data: dict):
+        # Export the municipality's data to JSON format by iterating through districts, nodes, and connections.
         for item in chain(self.districts, self.nodes, self.connections):
             data = item.export_json(data)
         return data
@@ -35,14 +38,13 @@ class Municipality:
                         self.connections.append(copy.deepcopy(connection))
    
     def add_district_interconnection(self, connection, commodity, district_from_name, district_to_name):
-        # Add connection between two districts
         for district in self.districts:
-            if district.get_name() == district_to_name: # or (district_to_name == "All" and district.get_name() != district_from_name):
+            if district.get_name() == district_to_name:
                 for node in district.nodes:
                     if node.name == commodity:
                         connection.set_node_to(node)
                 for district in self.districts:
-                    if district.get_name() == district_from_name:#  or (district_from_name == "All" and district.get_name() != district_to_name):
+                    if district.get_name() == district_from_name:
                         for node in district.nodes:
                             if node.get_name() == commodity:
                                 connection.set_node_from(node)

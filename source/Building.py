@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from itertools import chain
 from dataclasses import dataclass, field
 
+# Define a Retrofit class to represent retrofit options for buildings
 @dataclass
 class Retrofit:
     name: str
@@ -12,60 +13,69 @@ class Retrofit:
     decrease_to_normal: float
 
 
+# Define a Building class to represent a building and its associated components
 @dataclass
 class Building:
-    name: str
-    building_type: str
-    construction_year: str
-    units: list = field(default_factory=list)
-    nodes: list = field(default_factory=list)
-    quantity: int = 1
-    district_name: str = ""
-    connections: list = field(default_factory=list)
-    storages: list = field(default_factory=list)
-    retrofit_list: list = field(default_factory=list)
-    nodes_to_retrofit: list = field(default_factory=list)
+    name: str  # Name of the building
+    building_type: str  # Type of the building (e.g., residential, commercial)
+    construction_year: str  # Year of construction
+    units: list = field(default_factory=list)  # List of units in the building
+    nodes: list = field(default_factory=list)  # List of nodes in the building
+    quantity: int = 1  # Quantity of buildings (default is 1)
+    district_name: str = ""  # Name of the district the building belongs to
+    connections: list = field(default_factory=list)  # List of connections between nodes
+    storages: list = field(default_factory=list)  # List of storage units in the building
+    retrofit_list: list = field(default_factory=list)  # List of retrofit options
+    nodes_to_retrofit: list = field(default_factory=list)  # Nodes targeted for retrofitting
 
+    # Add a unit to the building and set its location name
     def add_unit(self, unit):
         unit.set_location_name(f"_{self.district_name}_B-LVL_{self.name}")
         self.units.append(unit)
 
+    # Add a node to the building and set its location name
     def add_node(self, node):
         node.set_location_name(f"_{self.district_name}_B-LVL_{self.name}")
         self.nodes.append(node)
 
+    # Add a storage unit to the building and set its location name
     def add_storage(self, storage):
         storage.set_location_name(f"_{self.district_name}_B-LVL_{self.name}")
         self.storages.append(storage)
 
+    # Set the quantity of buildings
     def set_quantity(self, quantity: int):
         self.quantity = quantity
 
+    # Add a connection between nodes
     def add_connection(self, connection):
         self.connections.append(connection)
 
+    # Get the name of the building
     def get_name(self):
         return self.name
 
+    # Add a retrofit option to the building
     def add_retrofit(self, name, commodity_to_retrofit, increase_performance, price):
         if commodity_to_retrofit not in self.nodes_to_retrofit:
             self.nodes_to_retrofit.append(commodity_to_retrofit)
         self.retrofit_list.append(Retrofit(name, commodity_to_retrofit, price * self.quantity, increase_performance))
 
+    # Create a retrofit mode for the building by modifying nodes and connections
     def create_building_retrofit_mode(self):
         for node in self.nodes:
             if node.get_name() in self.nodes_to_retrofit:
-                new_node = copy.deepcopy(node)
+                new_node = copy.deepcopy(node)  # Create a deep copy of the node
                 old_demand = 0
                 if "demand" in new_node.direct_parameters:
                     old_demand = new_node.get_value("demand")
-                    node.add_direct_parameter("demand", 0)
+                    node.add_direct_parameter("demand", 0)  # Set the original node's demand to 0
                 else:
                     continue
-                new_node.set_name(f"Retrofit_{node.get_name()}")
+                new_node.set_name(f"Retrofit_{node.get_name()}")  # Rename the new node
                 self.nodes.append(new_node)
-                
 
+                # Create a base connection between the original and new node
                 new_connection = Connection()
                 new_connection.name = f"Base_connection_{node.get_name()}_{self.name}_{self.district_name}"
                 new_connection.set_node_from(node)
@@ -73,6 +83,7 @@ class Building:
                 new_connection.add_direct_parameter("fix_ratio_out_in_connection_flow(from_node_to_node)", 1)
                 self.connections.append(new_connection)
 
+                # Add retrofit-specific connections
                 for retrofit in self.retrofit_list:
                     if retrofit.commodity == node.get_name():
                         new_connection = Connection()
@@ -93,6 +104,7 @@ class Building:
                         new_connection.add_direct_parameter("candidate_connections", self.quantity)
                         self.connections.append(new_connection)
 
+    # Add parameters to all units and storages in the building
     def add_unit_parameter(self, target_parameter, building_target, unit_target, data, data_type):
         if building_target == "All" or self.get_name() in building_target:
             for unit in self.units:
@@ -100,6 +112,7 @@ class Building:
             for storage in self.storages:
                 storage.add_storage_parameter(target_parameter, unit_target, data, data_type)
 
+    # Add parameters to all nodes in the building
     def add_node_parameter(self, target_parameter, building_target, commodity_target, data, data_type, quantitative_flag):
         if building_target == "All" or self.get_name() in building_target:
             for node in self.nodes:
@@ -108,13 +121,14 @@ class Building:
                 else:
                     node.add_node_parameter(target_parameter, commodity_target, data, data_type)
 
+    # Set the district name for the building and update all components
     def set_district_name(self, district_name: str):
         self.district_name = district_name
         for item in chain(self.nodes, self.units, self.storages):
             item.set_location_name(f"_{self.district_name}_B-LVL_{self.name}")
 
+    # Export the building's data to JSON format
     def export_json(self, data: dict):
         for item in chain(self.nodes, self.units, self.connections, self.storages):
             data = item.export_json(data)
         return data
-
