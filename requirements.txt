@@ -1,0 +1,26 @@
+Softwares Version:
+    Python 3.12
+    SpineToolbox 0.12.0.dev12
+    Julia 1.11
+    SpineOPt 0.9.2
+
+Python Libraries:
+    copy
+    dataclasses
+    itertools
+    typing
+    datetime
+    json
+    os
+    pandas
+    numpy
+    matplotlib
+    seaborn
+
+Functionalities:
+    Data manipulation with pandas
+    Numerical operations with numpy
+    Data visualization with matplotlib and seaborn
+    JSON manipulation with custom functions
+    Object management with dataclasses
+    Date and time operations with datetime

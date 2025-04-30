@@ -195,10 +195,6 @@ From which district the connection is coming from.
 From which building the connection is coming from. 
 If not specified, then the connection is starting from the district directly at district level.
 "All" can be written as argument of this parameter. It allows to link all the building of a district to a district level. The code will generate 1 entity of connection for each type of building going to the district level.
-**`Capacity`**
-The maximum capacity for 1 connection. 
-**`Flow Cost`**
-The flow cost for 1 connection (CHF/kWh or any other currency or unit flow used in the model)
 #### To node
 **`District level`**
 To which district the connection is going to.
@@ -206,10 +202,9 @@ To which district the connection is going to.
 To which building the connection is going to. 
 If not specified, then the connection is finishing in the district directly at district level.
 "All" can be written as argument of this parameter. It allows to link all the building of a district to a district level. The code will generate 1 entity of connection for each type of building going to the district level.
-**`Capacity`**
-See 'Capacity' definition above for reference.
-**`Flow Cost`**
-See 'Flow Cost' definition above for reference.
+#### Additional parameters
+Any additional parameter specific to this connection can be written here but the SpineOpt code should be added. It will overrule the base parameter that was set prior in the "Connection" sheet. 
+For example: you can write "connection_capacity(to_node)" in the column code and the attributed new value will appear in this specific connection.
 
 ---
 
@@ -230,55 +225,49 @@ _Each unit can generate up to 3 commodities._
 _Specifies whether the unit operates at district or building scale._
 - **`CO2 production`** *(float - optional)*
 _Quantity of CO2 produced (positive value) or consumed (negative value) with Input commodity 1 as reference._
-- **`Fixed yearly operation/maintenance costs`** *(float - optional)*
-_Yearly OPEX per kW installed._
-- **`Fixed hourly operation/maintenance costs (SpineOpt)`** *(automatic calculation)*
-_SpineOpt requires hourly OPEX, which Excel calculates automatically._
+
 
 ---
 
 ### Investments
 Some parameters are **optional**. If a unit is not intended for investment, these fields can be left blank.
-
-- **`Investment Cost per kW`** *(float - optional)*
-- **`Investment Cost`** *(automatic OR float)*
-- **`Economic lifetime`** *(duration)*
+- **`Fixed yearly operation/maintenance costs`** *(float - optional)* _Yearly OPEX per MW installed._
+- **`Fixed hourly operation/maintenance costs (SpineOpt)`** *(automatic calculation)* _SpineOpt requires hourly OPEX, which Excel calculates automatically._
+- **`Investment Cost per MW`** *(float - optional)* _CAPEX per MW installed_
+- **`Investment Cost`** *(automatic OR float)* _total CAPEX for 1 unit invested_
+- **`Economic lifetime`** *(duration)* 
 - **`Technical lifetime`** *(duration)*
-- **`Investment type`** *(Excel Data Validation: Integer/Continuous)*
-_"Continuous" is recommended for better computation performance._
+- **`Investment type`** *(Excel Data Validation: Integer/Continuous)* _"Continuous" is recommended for better computation performance._
 - **`Investment type (SpineOpt)`** *(automatic calculation)*
 - **`Discount rate (technology specific)`** *(float - optional)*
 - **`Decommissioning cost`** *(float - optional)*
 - **`Decommissioning time`** *(duration - optional)*
-- **`Lead time`** *(duration - optional)*
-_Time required to commission the unit._
+- **`Lead time`** *(duration - optional)* _Time required to commission the unit._
 
 ---
 
 ### Efficiencies  
 Efficiency from **input commodity** to **output commodity**:
 
-- **`Efficiency x → y`** *(float/array)*
-_Defines efficiency. Can be set as an array for operating points._
+- **`Efficiency x → y`** *(float/array)* _Defines efficiency. Can be set as an array for operating points._
 
 ---
 
 ### Capacities
-- **`Capacity INPUT x`** *(float)*
-_Defines input capacity._
-- **`Capacity OUTPUT y`** *(float)*
-_Defines output capacity._
+- **`Capacity INPUT x`** *(float)* _Defines input capacity._
+- **`Capacity OUTPUT y`** *(float)* _Defines output capacity._
 
 ---
 
 ### Advanced Parameters (Optional)
 These parameters **fine-tune** unit operation.
 
+#### Availability factor
+- **`Availability factor of the unit`** *(timeserie)* _Allow to active/deactivate a specific unit over the year (very useful for energy autonomy scenario)_
+
 #### Costs
-- **`Start-up cost`** *(float)*
-_Cost incurred each time the unit starts up._
-- **`Shutdown cost`** *(float)*
-_Cost incurred each time the unit shuts down._
+- **`Start-up cost`** *(float)* _Cost incurred each time the unit starts up._
+- **`Shutdown cost`** *(float)* _Cost incurred each time the unit shuts down._
 - **`Variable fuel costs INPUT x`** *(float)*
 - **`Variable fuel costs OUTPUT y`** *(float)*
 - **`Variable operating costs of INPUT x`** *(float)*
@@ -286,10 +275,8 @@ _Cost incurred each time the unit shuts down._
 - **`Procurement cost for reserves`** *(float - not implemented yet)*
 
 #### Time Constraints
-- **`Minimum up time`** *(duration)*
-_Minimum time the unit must stay ON._
-- **`Minimum down time`** *(duration)*
-_Minimum time the unit must stay OFF._
+- **`Minimum up time`** *(duration)* _Minimum time the unit must stay ON._
+- **`Minimum down time`** *(duration)* _Minimum time the unit must stay OFF._
 - **`Ramp up limit OUTPUT y`** *(float)*
 - **`Ramp down limit OUTPUT y`** *(float)*
 
@@ -304,6 +291,9 @@ _Minimum time the unit must stay OFF._
 - **`Maximum ramp-down of OUTPUT y`** *(float)*
 - **`Maximum ramp up of INPUT x`** *(float)*
 - **`Maximum ramp-up of OUTPUT y`** *(float)*
+
+
+
 ---
 
 ## Storages
@@ -324,6 +314,8 @@ _Naming convention:_
 _Specifies the commodity stored._  
 - **`District / Building scale`** *(Excel Data Validation)*
 _Specifies whether the storage operates at district or building scale._  
+
+### Technical
 - **`Capacity`** *(float)*
 _Maximum storage capacity._  
 - **`Efficiency to storage`** *(float)*
@@ -331,39 +323,28 @@ _Efficiency when storing the commodity._
 - **`Efficiency from storage`** *(float)*
 _Efficiency when retrieving the commodity._  
 - **`Self-discharge`** *(float - optional)*
-_Represents storage losses over time._  
-- **`Initial storage level`** *(float - optional)*
-_Defines the initial stored quantity._  
-- **`Fixed yearly operation/maintenance costs`** *(float - optional)*
-_Yearly OPEX per unit of capacity._  
-- **`Fixed hourly operation/maintenance costs (SpineOpt)`** *(automatic calculation)*
-_SpineOpt requires hourly OPEX, which Excel calculates automatically._  
-
----
-
-### Rating Power
+_Represents storage losses over time._
 - **`Capacity INPUT`** *(float)*
 _Defines the maximum charge rate._  
 - **`Capacity OUTPUT`** *(float)*
-_Defines the maximum discharge rate._  
+_Defines the maximum discharge rate._ 
+
+
+
 
 ---
 
 ### Investments
 Some parameters are **optional**. If a storage is not intended for investment, these fields can be left blank.
-
-- **`Investment Cost per kWh`** *(float - optional)*
-- **`Investment Cost`** *(automatic OR float)*
+- **`Fixed yearly operation/maintenance costs`** *(float - optional)* _Yearly OPEX per unit of capacity._  
+- **`Fixed hourly operation/maintenance costs (SpineOpt)`** *(automatic calculation)* _SpineOpt requires hourly OPEX, which Excel calculates automatically._  
+- **`Investment Cost per MWh`** *(float - optional)* _CAPEX per MWh installed_
+- **`Investment Cost`** *(automatic OR float)* 
 - **`Economic lifetime`** *(duration)*
 - **`Technical lifetime`** *(duration)*
-- **`Investment type`** *(Excel Data Validation: Integer/Continuous)*
-_"Continuous" is recommended for better computation performance._  
+- **`Investment type`** *(Excel Data Validation: Integer/Continuous)* _"Continuous" is recommended for better computation performance._  
 - **`Investment type (SpineOpt)`** *(automatic calculation)*
-- **`Discount rate (technology specific)`** *(float - optional)*
-- **`Decommissioning cost`** *(float - optional)*
-- **`Decommissioning time`** *(duration - optional)*
-- **`Lead time`** *(duration - optional)*
-_Time required to commission the storage._  
+
 
 ---
 
@@ -388,6 +369,14 @@ _Minimum time the storage must stay inactive._
 - **`Ramp up limit (OUTPUT)`** *(float - optional)*
 - **`Ramp down limit (OUTPUT)`** *(float - optional)*
 
+#### Investments (advanced)
+- **`Discount rate (technology specific)`** *(float - optional)*
+- **`Decommissioning cost`** *(float - optional)*
+- **`Decommissioning time`** *(duration - optional)*
+- **`Lead time`** *(duration - optional)* _Time required to commission the storage._  
+
+
+
 ## Connections
 Defining a connection in the **Connection Excel sheet** does not automatically include it in the model.  
 Each connection must be assigned in the **Commodities sheet**.
@@ -403,19 +392,24 @@ _Report here the naming convention for connection_
 _Specifies the commodity being transferred._  
 - **`Type`** *(Excel Data Validation)*
 _Defines the type of connection (e.g., Lossless Bidirectional,	normal)._  
+- **`Type (SpineOpt)`** *(automatic - code for SpineOpt)*
+
+### Power rating
 - **`Efficiency`** *(float)*
 _Represents losses or conversion factors during transfer._  
-- **`Length (not used in the model)`**
-The total length of the connection. Parameter not used in the model. 
-
+- **`Capacity (from node)`** *(float)*
+_Maximum capacity the connection can transfer from a node._  
+- **`Capacity (to node)`** *(float)*
+_Maximum capacity the connection can transfer to a node._  
 
 ---
 
 ### Investments
 Some parameters are **optional**. If a connection is not intended for investment, these fields can be left blank.
-
-- **`Investment Cost per unit length`** *(float - optional)*
-Could be used to define **`Investment Cost`** automatically using a formula with the **`length`** parameter.
+- **`Fixed yearly operation/maintenance costs`** *(float - optional)* _Yearly OPEX per unit of capacity._  
+- **`Fixed hourly operation/maintenance costs (SpineOpt)`** *(automatic calculation)* _SpineOpt requires hourly OPEX, which Excel calculates automatically._  **SpineOpt doesn't consider any cost like this for connection entities**
+- **`Investment Cost per MW`** *(float - optional)*
+_Used to define **`Investment Cost`** automatically using a formula with the **`Capacity (from node)`** parameter._
 - **`Investment Cost`** *(automatic OR float)*
 - **`Economic lifetime`** *(duration)*
 - **`Technical lifetime`** *(duration)*
@@ -426,7 +420,18 @@ _"Continuous" is recommended for better computation performance._
 - **`Decommissioning time`** *(duration - optional)*
 - **`Lead time`** *(duration - optional)*
 _Time required to commission the connection._  
+- **`Flow cost (from)`** *(float)*
+_Flow cost within the connection (kCHF/MWH), from the node._  
+- **`Flow cost (to)`** *(float)*
+_Flow cost within the connection (kCHF/MWH), to the node._  
 
+### Electrical properties
+- **`Reactance base`** *(float)*
+_Base of reactance for p.u. calculation (e.g. 100MW/pu)._  
+- **`Reactance`** *(float)*
+_Reactance of the connection (p.u.)._  
+- **`Resistance`** *(float)*
+_Resistance of the connection (p.u.)._  
 
 ## Building types
 Building type are registered in the **Building Excel sheet** using:
@@ -446,14 +451,7 @@ Name of the retrofit. The naming convention is ...
 The commodity in which the retrofit is acting.
 - **`Decrease in consumption [%]`**
 The decrease in consumption. Example: Smart lighting would reduce by 8% of total electricity demand. Led would reduce by 4%. All smart appliances would reduce by 12%.
-- **`Price for 1 building [CHF]`**
-WARNING
-WARNING
-WARNING
-Should check again if that's true. WARNING
-WARNING
-WARNING
-WARNING
+- **`Price for 1 building [kCHF]`**
 
 ## District
 District are defined in the **District Excel sheet**. This sheet (and the **Commodities Excel sheet**) are the ones which should be updated for each new municipalities. The other **Excel sheets (units, storages, connections, Specifications and Report)** are general sheet and are just defining general components. The **Building type Excel sheet** could be adapted to each municipality but could also be re-used at the user's preferences.
@@ -478,14 +476,15 @@ Report can be created in the **Report Excel sheet**. Outputs can be assigned to 
 ---
 
 ## **Key Features**  
-- **Feature 1:** *[Brief description & add an image to illustrate]*  
-- **Feature 2:** *[Brief description & add an image to illustrate]*  
-- **Feature 3:** *[Brief description & add an image to illustrate]*  
-- **Feature 4:** *[Brief description & add an image to illustrate]*
-
+- **Integration of Renewable Energy Sources:** *wide range of renewable energy sources can be implemented, including solar photovoltaic (PV) systems, wind turbines, geothermal, hydropower.*.
+- **Technology competition**: *many storages, retrofits, connections options can be implemented and put in competition to reach the best energy system according the set constraints*
+- **Decentralized Energy Management:** *Distributed Energy Resources (DERs) such as rooftop solar PV, batteries, heat pumps, and district heating systems, allowing for local energy production and consumption*
+- **Multi-year optimization:** *Long term energy planning and strategy: identify the best time to invest before it's too late*
+- **Robust and Flexible Framework:** *energy strategies across different scales, from individual buildings to entire municipalities, considering techno-economic assumptions, retrofit options, sector coupling, and seasonal storage to identify the most cost-effective and sustainable energy solutions.*
+- **Community driven**: *Whenever a bug or a functionnality need to be adressed, the github forum allows for exchanges in experience and practices*
 ---
 
-
+<!-- 
 ## **Using MORPHE2US**
 ... 
 ### **Creating a New Project**
@@ -499,3 +498,5 @@ Report can be created in the **Report Excel sheet**. Outputs can be assigned to 
 
 ### Debugging the python pipeline
 ... 
+
+-->
