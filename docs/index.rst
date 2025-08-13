@@ -23,4 +23,4 @@ Contents:
    4_building_a_model
    5_running_a_model
    6_analysing_a_model
-   7_tutorials/index
+.. 7_tutorials/index
