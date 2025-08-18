@@ -31,3 +31,7 @@ source_suffix = {
     '.rst': 'restructuredtext',
     '.md': 'markdown',
 }
+
+extensions = [
+    'myst_parser',
+]
