@@ -1,4 +1,4 @@
-# Running a MORPHE2US Model
+# Running a Model
 
 Once you have built and validated your MORPHE2US model, the next step is to run the optimization. This process involves selecting an appropriate solver, executing the model in SpineToolbox, and ensuring results are correctly generated.
 

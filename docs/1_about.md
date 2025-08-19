@@ -1,4 +1,4 @@
-# About MORPHE2US
+# About
 
 **MORPHE2US** stands for **Municipal Optimization for Renewable Projects in Hydrogen & Energy Efficient Utility Solutions**.
 

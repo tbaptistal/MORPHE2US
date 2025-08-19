@@ -1,4 +1,4 @@
-# Building a MORPHE2US Model
+# Building a Model
 
 This guide walks you through the process of building a model using MORPHE2US — from preparing input data to generating a structured Spine-compatible database for optimization.
 

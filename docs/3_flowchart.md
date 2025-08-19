@@ -1,4 +1,4 @@
-# MORPHE2US Workflow Overview
+# Workflow Overview
 
 The MORPHE2US model follows a clear pipeline from user input to optimization results. Below is a high-level flowchart that illustrates the modeling process.
 

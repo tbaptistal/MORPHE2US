@@ -1,4 +1,4 @@
-# Getting Started with MORPHE2US
+# Getting Started
 
 Welcome! This guide will walk you through the installation and first launch of MORPHE2US.
 
@@ -47,6 +47,6 @@ We recommend reviewing the documentation, especially the visual guide that expla
 
 Download the MORPHE2US package (Excel workbook and Python code) from the official GitHub repository.
 
-For a detailed overview of how MORPHE2US works and the dependencies between files, refer to the [3_flowchart.md](3_flowchart.md) document.
+For a detailed overview of how MORPHE2US works and the dependencies between files, refer to the [Workflow](3_flowchart.md) document.
 
 ---
