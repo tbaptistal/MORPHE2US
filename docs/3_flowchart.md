@@ -33,17 +33,3 @@ all visualizable via SpineToolbox or exported externally.
 | **Spinetool Box**              |
 | ↓ *(SpineOpt)* |
 | **Results**                    |
-
-.. list-table:: Workflow Steps
-   :widths: 25
-   :align: center
-
-   * - **Excel + .json inputs**
-   * - ↓
-   * - **Python Parser**
-   * - ↓ *(Generates)*
-   * - **Spine-readable Database**
-   * - ↓
-   * - **Spinetool Box**
-   * - ↓ *(Optimizes with SpineOpt)*
-   * - **Results**
