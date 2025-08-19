@@ -27,7 +27,7 @@ all visualizable via SpineToolbox or exported externally.
 |:------------------------------:|
 | ↓                              |
 | **Python Parser**              |
-| ↓             |
+|                  ↓             |
 | **Spine-readable Database (.json)**    |
 | ↓                              |
 | **Spinetool Box**              |
