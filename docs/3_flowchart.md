@@ -25,11 +25,11 @@ all visualizable via SpineToolbox or exported externally.
 
 | **Excel + .json inputs**       |
 |:------------------------------:|
-| ↓                              |
+|&nbsp; &nbsp; &nbsp; &nbsp; ↓                              |
 | **Python Parser**              |
-|                  ↓             |
+| &nbsp; &nbsp; &nbsp; &nbsp;                 ↓             |
 | **Spine-readable Database (.json)**    |
-| ↓                              |
+| &nbsp; &nbsp; &nbsp; &nbsp;↓                              |
 | **Spinetool Box**              |
-| ↓ *(SpineOpt)* |
+| &nbsp; &nbsp; &nbsp; &nbsp;↓ *(SpineOpt)* |
 | **Results**                    |
