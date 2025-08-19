@@ -4,35 +4,46 @@ The MORPHE2US model follows a clear pipeline from user input to optimization res
 
 📊 **Workflow Steps**
 
-Excel Input + JSON Time Series
+*Excel Input + JSON Time Series*
 Users define their scenario, technology assumptions, and demand profiles using:
     - Excel files (tech specs, scenario design, project info)
     - .json time series files (for hourly/daily demand and generation)
 
-Python Parser (`morpheus_pipeline`)
+*Python Parser (`morpheus_pipeline`)*
 A Python script parses and validates the input data, then converts it to a Spine-compatible format.
 
-Spine-readable Database (.json)
+*Spine-readable Database (.json)*
 The converted .json file is imported into SpineToolbox.
 
-Spinetoolbox + SpineOpt
+*Spinetoolbox + SpineOpt*
 The core optimization is performed using SpineOpt
 
-Results
+*Results*
 Energy balances, emissions, costs, and technology uptake —
 all visualizable via SpineToolbox or exported externally.
 
 
-<p align="center">
+| **Excel + .json inputs**       |
+|:------------------------------:|
+| ↓                              |
+| **Python Parser**              |
+| ↓             |
+| **Spine-readable Database (.json)**    |
+| ↓                              |
+| **Spinetool Box**              |
+| ↓ *(SpineOpt)* |
+| **Results**                    |
 
-<b>Excel + .json inputs</b>  
-&nbsp; &nbsp; &nbsp; &nbsp; ↓
-<b>Python Parser</b>  
-&nbsp; &nbsp; &nbsp; &nbsp; ↓ <i>(Generates)</i>  
-<b>Spine-readable Database</b>  
-&nbsp; &nbsp; &nbsp; &nbsp; ↓ 
-<b>Spinetool Box</b>  
-&nbsp; &nbsp; &nbsp; &nbsp; ↓ <i>(Optimizes with SpineOpt)</i>  
-<b>Results</b>
+.. list-table:: Workflow Steps
+   :widths: 25
+   :align: center
 
-</p>
+   * - **Excel + .json inputs**
+   * - ↓
+   * - **Python Parser**
+   * - ↓ *(Generates)*
+   * - **Spine-readable Database**
+   * - ↓
+   * - **Spinetool Box**
+   * - ↓ *(Optimizes with SpineOpt)*
+   * - **Results**
