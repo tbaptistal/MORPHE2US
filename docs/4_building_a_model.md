@@ -137,7 +137,7 @@ You can now proceed to the next step:
 
 ---
 
-# JSON Input Data Structure
+## JSON Input Data Structure
 
 The `.json` file should follow this structure:
 ```json
