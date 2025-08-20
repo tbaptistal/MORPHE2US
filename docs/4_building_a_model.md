@@ -81,15 +81,15 @@ Now that the .json database has been created, you can open it using SpineToolbox
 
 ### 📝 Steps
 
-- Launch SpineToolbox
-- Create or open a project with at least the following components: 
+1. Launch SpineToolbox
+2. Create or open a project with at least the following components: 
     - 1 Data Store (input SQLite database)
     -  1 Run SpineOpt (optimization engine)
     - 1 Data Store (output SQLite database)
 ![](images/SpineToolBox_Base_structure.png)
-- In the input Data Store, use the integrated "Import" function as shown below:
+3. In the input Data Store, use the integrated "Import" function as shown below:
 ![](images/Import_tool.png)
-- Once the changes have been made to the Data Store, commit them to save.
+4. Once the changes have been made to the Data Store, commit them to save.
 
 ---
 
