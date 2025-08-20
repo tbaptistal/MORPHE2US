@@ -44,7 +44,7 @@ morpheus_project/
 └── MORPHE2US.xlsx
 ```
 
-It is recommanded to give timeseries in .json and fill every other datas directly in the Excel file. The .json data should  follow the format described here (insert link to another page)
+> 📌 **Recommendation:** Provide time series in `.json` format and fill all other data directly in the Excel file. The `.json` data should follow the format described [here](#json-input-data-structure). All `.json` files in the `morpheus_project/data` folder will be read by the Python parser and integrated into the model.
 
 ---
 
@@ -57,10 +57,13 @@ Use the MORPHE2US parser script to convert your input files into a SpineToolbox-
 Run the following command from your project root:
 
 ```bash
-python morpheus_pipeline/generate_spine_model.py \
-    --excel input/morphe2us_input.xlsx \
-    --timeseries input/timeseries.json \
-    --output output/morphe2us_model.json
+python MORPHE2US_pipeline.py --excel MORPHE2US_Scenario_1.xlsx --output output_Scenario_1.json
+```
+
+The --excel and --output parameters aren't mandatory and are by default replaced by MORPHE2US.xlsx & output.json. When you use the default names, the simple following command can be exectuted:
+
+```bash
+python MORPHE2US_pipeline.py
 ```
 
 This script:
@@ -79,28 +82,47 @@ Now that the .json database has been created, you can open it using SpineToolbox
 ### 📝 Steps
 
 - Launch SpineToolbox
-- Create or open a MORPHE2US project
-- Add the `morphe2us_model.json` as a SpineDB item
-- Optionally open it in SpineInterface to browse its contents
+- Create or open a project with at least the following components: 
+    - 1 Data Store (input SQLite database)
+    -  1 Run SpineOpt (optimization engine)
+    - 1 Data Store (output SQLite database)
+![](images/SpineToolBox_Base_structure.png)
+- In the input Data Store, use the integrated "Import" function as shown below:
+![](images/Import_tool.png)
+- Once the changes have been made to the Data Store, commit them to save.
 
 ---
 
 ## 🔍 Step 4: Verify and Validate
 
-Before running the model, verify that:
+Before running your model in **SpineToolbox**, it is crucial to **verify and validate** the imported data to ensure accuracy and completeness.
 
-- All technologies are correctly listed
-- Time series match the required resolution (hourly, daily, etc.)
-- Parameters like costs, efficiencies, emissions, and capacities are filled
-- Scenarios and temporal layers (years and slices) are in place
+---
 
-Use the interface to browse:
+### 📋 What to Check
 
-- objects
-- object_links
-- parameters
-- timeseries
-- scenarios
+#### **1. Technologies**
+- Verify that all technologies (e.g., wind turbines, electrolyzers) are correctly listed.
+- Check that their parameters (e.g., efficiency, costs, emissions) are filled and realistic.
+
+#### **2. Time Series**
+- Ensure that time series data (e.g., demand profiles, capacity factors) match the required **resolution** (hourly, daily, etc.).
+- Confirm that the time series aligns with the simulation timeline.
+
+#### **3. Nodes and Carriers**
+- Check that all **nodes** (e.g., electricity grid, heat network) and **carriers** (e.g., electricity, hydrogen) are correctly defined.
+- Validate that connections between nodes are properly established.
+
+#### **4. Parameters**
+- Review key parameters:
+  - Costs (investment, operational)
+  - Efficiencies
+  - Emissions factors
+  - Capacity limits
+
+#### **5. Scenarios and Temporal Layers**
+- Ensure that **scenarios** (below "Maps" in Spine) are correctly defined.
+- Verify that **years and time slices** are properly configured.
 
 ---
 
