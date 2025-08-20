@@ -8,7 +8,7 @@ Welcome to MORPHE2US's documentation!
 This guide will help you install, configure, run, and analyze models using MORPHE2US and SpineToolBox.
 
 .. note::
-   This documentation is a work in progress. Feedback and contributions are welcome!
+   This documentation is a work in progress. Feedback and contributions are welcome! Pages Building a model to analysing a model are still in progress.
 
 Contents:
 ---------

@@ -2,6 +2,8 @@
 
 This guide walks you through the process of building a model using MORPHE2US — from preparing input data to generating a structured Spine-compatible database for optimization.
 
+
+
 ---
 
 ## 🧰 Step 1: Prepare Your Input Files
@@ -42,9 +44,107 @@ morpheus_project/
 └── MORPHE2US.xlsx
 ```
 
-# JSON Data Structure
+It is recommanded to give timeseries in .json and fill every other datas directly in the Excel file. The .json data should  follow the format described here (insert link to another page)
+
+---
+
+## ⚙️ Step 2: Generate the Model
+
+Use the MORPHE2US parser script to convert your input files into a SpineToolbox-compatible database.
+
+### 🔧 Command
+
+Run the following command from your project root:
+
+```bash
+python morpheus_pipeline/generate_spine_model.py \
+    --excel input/morphe2us_input.xlsx \
+    --timeseries input/timeseries.json \
+    --output output/morphe2us_model.json
+```
+
+This script:
+
+- ✅ Validates and parses the Excel/JSON files
+- 🔁 Converts the structure into Spine-compatible format
+- 🧱 Creates a .json database ready to be loaded into SpineToolbox
+- 💡 You can re-run the parser any time you update your input files.
+
+---
+
+## 🧩 Step 3: Load the Model into SpineToolbox
+
+Now that the .json database has been created, you can open it using SpineToolbox.
+
+### 📝 Steps
+
+- Launch SpineToolbox
+- Create or open a MORPHE2US project
+- Add the `morphe2us_model.json` as a SpineDB item
+- Optionally open it in SpineInterface to browse its contents
+
+---
+
+## 🔍 Step 4: Verify and Validate
+
+Before running the model, verify that:
+
+- All technologies are correctly listed
+- Time series match the required resolution (hourly, daily, etc.)
+- Parameters like costs, efficiencies, emissions, and capacities are filled
+- Scenarios and temporal layers (years and slices) are in place
+
+Use the interface to browse:
+
+- objects
+- object_links
+- parameters
+- timeseries
+- scenarios
+
+---
+
+## ✅ Step 5: Ready to Run
+
+Your MORPHE2US model is now fully structured and loaded into SpineToolbox.
+
+You can now proceed to the next step:
+
+👉 [Running the Model](5_running_a_model.md)
+
+
+---
+
+# JSON Input Data Structure
 
 The `.json` file should follow this structure:
+```json
+[
+    {
+        "parameter_name": "unit_name",
+        "commodity": "commodity_name",
+        "building": "building_name", // or "All"
+        "district": "district_name", // or "All"
+        "unit": "unit_name",
+        "connection": "connection_name",
+        "quantitative": false, // true if the values need to be multiplicated. Ex: heat demand for 1 building while there are 12 buildings in the district so times 12.
+        "data": {
+            "data": [
+                0.002,
+                0.011,
+                0.014
+            ],
+            "index": {
+                "start": "yyyy-mm-ddThh:mm:ss",
+                "repeat": false, // Or true if it's cyclic
+                "ignore_year": true, // ignore the yyyy in the data
+                "resolution": "1h" // h for hours, D for days, M for months and Y for years
+            },
+            "type": "time_series" 
+        }
+    }
+]
+```        
 
 ## Example: `example.json`
 
@@ -125,71 +225,4 @@ The `.json` file should follow this structure:
         }
     }
 ]
-
-
 ```
----
-
-## ⚙️ Step 2: Generate the Model
-
-Use the MORPHE2US parser script to convert your input files into a SpineToolbox-compatible database.
-
-### 🔧 Command
-
-Run the following command from your project root:
-
-```bash
-python morpheus_pipeline/generate_spine_model.py \
-    --excel input/morphe2us_input.xlsx \
-    --timeseries input/timeseries.json \
-    --output output/morphe2us_model.json
-```
-
-This script:
-
-- ✅ Validates and parses the Excel/JSON files
-- 🔁 Converts the structure into Spine-compatible format
-- 🧱 Creates a .json database ready to be loaded into SpineToolbox
-- 💡 You can re-run the parser any time you update your input files.
-
----
-
-## 🧩 Step 3: Load the Model into SpineToolbox
-
-Now that the .json database has been created, you can open it using SpineToolbox.
-
-### 📝 Steps
-
-- Launch SpineToolbox
-- Create or open a MORPHE2US project
-- Add the `morphe2us_model.json` as a SpineDB item
-- Optionally open it in SpineInterface to browse its contents
-
----
-
-## 🔍 Step 4: Verify and Validate
-
-Before running the model, verify that:
-
-- All technologies are correctly listed
-- Time series match the required resolution (hourly, daily, etc.)
-- Parameters like costs, efficiencies, emissions, and capacities are filled
-- Scenarios and temporal layers (years and slices) are in place
-
-Use the interface to browse:
-
-- objects
-- object_links
-- parameters
-- timeseries
-- scenarios
-
----
-
-## ✅ Step 5: Ready to Run
-
-Your MORPHE2US model is now fully structured and loaded into SpineToolbox.
-
-You can now proceed to the next step:
-
-👉 [Running the Model](5_running_a_model.md)
