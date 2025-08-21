@@ -47,9 +47,15 @@ class Entity:
             }
             # Store the time series data in direct_parameters
             self.direct_parameters[key] = {"value": timeserie_data, "type": "time_series"}
+        elif data_type == "bool":
+            # Handle boolean data types
+            self.direct_parameters[key] = {"value": bool(data), "type": "bool"}
         else:
             # Store other types of data in direct_parameters
             self.direct_parameters[key] = {"value": data, "type": data_type}
+
+        if key == "units_invested_mga":
+                print(key, data, data_type)
 
     def get_name(self):
         # Retrieve the name of the entity

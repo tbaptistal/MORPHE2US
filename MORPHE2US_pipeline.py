@@ -467,7 +467,7 @@ def process_files(excel_filename, output_filename):
             district_to = connection.direct_parameters["NaM_district_lvl(to_node)"]["value"] if "NaM_district_lvl(to_node)" in connection.direct_parameters.keys() else None
             building_to = connection.direct_parameters["NaM_building_lvl(to_node)"]["value"] if "NaM_building_lvl(to_node)" in connection.direct_parameters.keys() else None
 
-            print(f"Connection: {connection_name} {commodity_name} {district_from},{building_from} {district_to},{building_to}")
+            # print(f"Connection: {connection_name} {commodity_name} {district_from},{building_from} {district_to},{building_to}")
             
             # This part could be done directly within the municipality class but like this it is easier to debug
 
@@ -519,7 +519,6 @@ def process_files(excel_filename, output_filename):
     if (list(df_specs_operation[df_specs_operation["code"] == "NaM_linear_op"].value))[0] == True:
         # Extract the relevant rows for linear operation
         df_specs_operation = df_specs.iloc[(df_specs[df_specs["code"] == "NaM_linear_op"].index[0]+1): df_specs[df_specs["code"] == "NaM_bool_specific_year"].index[0], :].dropna(subset=["code", "value"])
-        print(df_specs_operation)
         operation = Temporal_block()
         # Add parameters for the linear operation block
         for j, row in df_specs_operation.iterrows():
@@ -593,6 +592,15 @@ def process_files(excel_filename, output_filename):
             investment.add_direct_parameter(row.iloc[1], row.iloc[2], row.iloc[0])
         investment.add_direct_parameter("block_end", model.direct_parameters["model_end"]["value"], model.direct_parameters["model_end"]["type"])
         model.add_investment(investment)
+
+    # Read the 'Specifications' sheet and extract MGA-related rows
+    df_specs = pd.read_excel(excel_filename, sheet_name='Specifications')
+    df_specs_mga = df_specs.iloc[df_specs[df_specs["Model"] == MGA_parameters_str].index[0]:, :].dropna(subset=["code", "value"])
+    df_specs_mga = df_specs_mga.loc[:, ["type", "code", "value"]]
+    df_specs_mga.reset_index(drop=True, inplace=True)
+    print(df_specs_mga)
+    for j, row in df_specs_mga.iterrows():
+        model.add_direct_parameter(row.iloc[1], row.iloc[2], row.iloc[0])
 
     # %%
     # Building the CO2 node and connections within the municipality 
@@ -677,11 +685,13 @@ def process_files(excel_filename, output_filename):
     with open('source/template.json') as f:
         data_template = json.load(f)
 
-    # Add the retrofit mode for each building in all districts
-    for district in municipality.districts:
-        for building in district.buildings:
-            # Create retrofit mode for the building
-            building.create_building_retrofit_mode()
+    # Check if building retrofit mode is enabled
+    if (list(df_specs_investment[df_specs_investment["code"] == "NaM_building_retrofits"].value))[0] == True:
+        # Add the retrofit mode for each building in all districts
+        for district in municipality.districts:
+            for building in district.buildings:
+                # Create retrofit mode for the building
+                building.create_building_retrofit_mode()
 
     # Add the municipality structure to the model
     model.add_modelisation_structure(municipality)
