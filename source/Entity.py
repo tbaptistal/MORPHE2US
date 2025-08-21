@@ -54,9 +54,6 @@ class Entity:
             # Store other types of data in direct_parameters
             self.direct_parameters[key] = {"value": data, "type": data_type}
 
-        if key == "units_invested_mga":
-                print(key, data, data_type)
-
     def get_name(self):
         # Retrieve the name of the entity
         return self.name
