@@ -1,3 +1,5 @@
 # MORPHE2US
 
-Available [here](https://morphe2us.readthedocs.io/en/latest/1_about.html#)
+Municipal Optimization for Renewable Projects in Hydrogen & Energy Efficient Utility Solutions.
+
+Excel-based techno-economic modeling framework designed to support municipalities in making sustainable, cost-effective energy investment decisions.
