@@ -1,26 +1,9 @@
-Softwares Version:
-    Python 3.12
-    SpineToolbox 0.12.0.dev12
-    Julia 1.11
-    SpineOPt 0.9.2
+# Python dependencies for the MORPHE2US parser (MORPHE2US_pipeline.py)
 
-Python Libraries:
-    copy
-    dataclasses
-    itertools
-    typing
-    datetime
-    json
-    os
-    pandas
-    numpy
-    matplotlib
-    seaborn
+pandas>=2.2
+numpy>=1.26
+openpyxl>=3.1  # enables pandas to read .xlsx
 
-Functionalities:
-    Data manipulation with pandas
-    Numerical operations with numpy
-    Data visualization with matplotlib and seaborn
-    JSON manipulation with custom functions
-    Object management with dataclasses
-    Date and time operations with datetime
+# Optional, for external plotting/analysis
+matplotlib>=3.8
+seaborn>=0.13
