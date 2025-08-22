@@ -1,52 +1,73 @@
 # Getting Started
 
-Welcome! This guide will walk you through the installation and first launch of MORPHE2US.
+This page prepares your environment so you can build and run a model.  
 
 ---
 
-## System Requirements
+## Software Requirements
 
-MORPHE2US is designed to be flexible, but here are some recommendations for optimal performance:
+| Component     | Version (tested)          |
+|---------------|---------------------------|
+| Python        | 3.12                      |
+| Julia         | 1.11                      |
+| Spine Toolbox | 0.12.0.dev12              |
+| SpineOpt      | 0.9.2                     |
 
-| Component         | Notes                     |
-|-------------------|---------------------------|
-| OS                | Windows/macOS/Linux       |
-| CPU               | Faster = shorter runtime  |
-| RAM               | ≥8GB (model-dependent)    |
-| Python            | 3.8+                      |
-| SpineToolBox      | Required                  |
-| SpineOpt          | Required                  |
-
+> Spine Toolbox manages the project and data stores; SpineOpt is the optimization model used **inside** Spine Toolbox. Python is used to process the input data into a readable format within Spine Toolbox and Julia to run the optimization.
 
 ---
 
 ## Installation Steps
 
-### 1. Install Python and Dependencies
+### 1. Python set-up
 
 Download and install Python from the [official website](https://www.python.org/downloads/).
 Make sure to check the option to add Python to your system PATH during installation.
 
+#### Python libraries (installed via `requirements.txt`)
+- pandas
+- numpy
+- openpyxl
+- matplotlib
+- seaborn
+
+Install all at once:
+
+```bash
+pip install -r requirements.txt
+```
+
 ---
 
-### 2. Install SpineToolBox
+### 2. Install Spine Toolbox
 
-Follow the installation guide available on the [SpineToolBox GitHub repository](https://github.com/spine-tools/Spine-Toolbox).
+Follow the installation guide available on the [Spine Toolbox GitHub repository](https://github.com/spine-tools/Spine-Toolbox).
 
 ---
 
 ### 3. Install SpineOpt
 
-You can install SpineOpt directly from SpineToolBox.
-For more details, refer to the [official SpineOpt documentation](https://spine-tools.github.io/SpineOpt.jl/latest/index.html) or the [SpineOpt GitHub repository](https://github.com/spine-tools/SpineOpt.jl).
+You can install SpineOpt directly from Spine Toolbox.
+For more details, refer to the [official SpineOpt documentation](https://spine-toolbox.readthedocs.io/en/stable/how_to_run_spineopt.html) or the [SpineOpt GitHub repository](https://github.com/spine-tools/SpineOpt.jl).
 We recommend reviewing the documentation, especially the visual guide that explains the color coding for components (e.g., production units in red, connections in green, and physical nodes in blue).
 
 ---
 
-### 4. Download MORPHE2US
+### 4. Prepare project strcture
 
-Download the MORPHE2US package (Excel workbook and Python code) from the official GitHub repository.
-
-For a detailed overview of how MORPHE2US works and the dependencies between files, refer to the [Workflow](3_flowchart.md) document.
+Clone or download the MORPHE2US repo (Excel workbook and Python code) from the official GitHub repository. The working folder should have the following structure:
+```
+morpheus_project/
+├── data/                 # all time series as .json
+│ ├── demand_el.json
+│ ├── ...
+│ └── cf_wind.json
+├── MORPHE2US.xlsx        # Excel inputs (sheets define the model)
+└── MORPHE2US_pipeline.py # python parser converting Excel + time series to Spine-readable .json
+```
 
 ---
+
+With the pre-requisites installed, you can now define your energy system model:
+
+👉 [Model components](3_model_components.md)
