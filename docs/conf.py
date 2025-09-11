@@ -34,6 +34,6 @@ source_suffix = {
 
 extensions = [
     'myst_parser',
-    "sphinxcontrib.mermaid"
+    "sphinx_mermaid"
 
 ]
