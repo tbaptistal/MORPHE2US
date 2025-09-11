@@ -31,7 +31,7 @@ MORPHE2US consists of three main components:
 ## Where to go next
 
 
-```mermaid
+```{mermaid}
 flowchart TD
 
     A[1–2: Collect techno-economic data<br/>(technologies, demands, costs, etc.)]
