@@ -31,25 +31,24 @@ MORPHE2US consists of three main components:
 ## Where to go next
 
 
-```{eval-rst}
-.. mermaid::
+```{mermaid}
+flowchart TD
 
-   flowchart TD
+    A[1-2: Collect techno-economic data\n(technologies, demands, costs, etc.)]
 
-       A[1–2: Collect techno-economic data<br/>(technologies, demands, costs, etc.)]
+    B[3: Excel interface (MORPHE2US)\nDefine commodities, units,\nstorages, connections, etc.]
 
-       B[3: Excel interface (MORPHE2US)<br/>Define commodities, units,<br/>storages, connections, etc.]
+    C[4: Python parser (MORPHE2US_pipeline.py)\nReads Excel + external time series (.json / .csv)\n→ outputs SpineOpt JSON]
 
-       C[4: Python parser (MORPHE2US_pipeline.py)<br/>Reads Excel + external time series (.json / .csv)<br/>→ outputs SpineOpt JSON]
+    D[4: Spine Toolbox\nImport JSON, manage database]
 
-       D[4: Spine Toolbox<br/>Import JSON, manage database]
+    E[5: SpineOpt Optimization\nSolve model]
 
-       E[5: SpineOpt Optimization<br/>Solve model]
+    F[6: Post-processing & results\nExternal visualization (Python/Excel,\nlimited Spine GUI)]
 
-       F[6: Post-processing & results<br/>External visualization (Python/Excel,<br/>limited Spine GUI)]
-
-       A --> B --> C --> D --> E --> F
+    A --> B --> C --> D --> E --> F
 ```
+
 
 
 1. **Getting Started** — install prerequisites and set up folders:  
