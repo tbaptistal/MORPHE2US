@@ -2,33 +2,85 @@
 
 **MORPHE2US** stands for **Municipal Optimization for Renewable Projects in Hydrogen & Energy Efficient Utility Solutions**.
 
-It is a powerful, Excel-based techno-economic modeling framework designed to support **municipalities** in making **sustainable, cost-effective energy investment decisions**. The model is built around the key principles of the **UN Sustainable Development Goal 7**:  
-> *"Ensure access to affordable, reliable, sustainable and modern energy for all."*
+It is an Excel-based techno-economic modeling framework designed to support **municipalities** in identifying location-specific, cost-optimal pathways to decarbonize their energy systems.
 
 ## Purpose
 
-MORPHE2US helps cities and regions plan for a **net-zero future by 2050** by providing an optimization-based approach to:
-
-- Assessing renewable energy and storage technologies
-- Modeling current and future energy demand
-- Planning infrastructure investments across buildings and districts
-- Managing CO₂ emissions over time
+MORPHE2US helps cities and regions explore **decarbonization pathways** by converting techno-economic data into optimization-ready inputs for [SpineOpt](https://github.com/Spine-project/SpineOpt.jl).
+The tool provides a structured Excel interface that makes it possible to define technologies, demands, and system constraints, which are parsed via Python into `.json` files compatible with Spine Toolbox and SpineOpt.
+providing an optimization-based approach to:
 
 ## Key Features
 
-- ✅ **Integration of Renewable Energy Sources**: Model PV, heat pumps, wind, biomass, geothermal, etc.
-- 🧩 **Technology Competition**: Simulate competing investment options (e.g. storage, connections, retrofits)
-- 🏘 **Decentralized Energy Management**: Model DERs (rooftop solar, batteries, heat pumps, etc.)
-- 🗓 **Multi-Year Optimization**: Plan long-term energy transitions over decades to reach global goals such as net-0 CO2 by 2050.
-- 🏗 **Scalable**: From single buildings to entire districts or municipalities
+- ✅ **Flexible Technology Definition**: Include supply, conversion, and storage technologies  
+- 🏘 **Spatial Flexibility**: Model municipalities with multiple districts and building archetypes  
+- ⏱ **Temporal Resolution**: Support for single-year snapshots or multi-year transition pathways  
+- 📦 **Infrastructure Options**: Represent both existing infrastructure (brownfield) and new investments (greenfield)  
 - 💡 **Sector Coupling**: Gas, electricity, heat, and hydrogen in a single optimization
 - 📚 **Community-Driven**: Active SpineOpt GitHub forum for bug reports, improvements, and knowledge sharing
 
 ## Architecture
 
-The excel model outputs a `.json` file that can be imported directly into a Spine database to run simulations using the open-source **SpineOpt** energy modeling framework. 
+The Excel model outputs a `.json` file that can be imported directly into a Spine database to run simulations using the open-source **SpineOpt** energy modeling framework. 
 MORPHE2US consists of three main components:
 
 1. **Excel Workbook**: User-friendly input interface for defining model specifications
 2. **Python Pipeline**: Parses Excel and `.json` data into a model-ready format
-3. **SpineToolBox + SpineOpt**: Executes the optimization and visualizes results
+3. **Spine Toolbox + SpineOpt**: Executes the optimization and visualizes results
+
+## Where to go next
+
+
+**TODO**: shift workflow here and align with steps (input prep in 3, python parser/spine toolbox/optimization in 4, model running in 5, post-processing in 6, rest is here)
++----------------------------------+
+|  Collect techno-economic data    |
+|  (technologies, demands, etc.)   |
++----------------------------------+
+                |
+                v
++----------------------------------+
+|  Excel interface (MORPHE2US)     |
+|  Define commodities, units,      |
+|  storages, connections, etc.     |
++----------------------------------+
+                |
+                v
++----------------------------------+
+|  Python parser                   |
+|  (MORPHE2US_pipeline.py)         |
+|  Reads Excel + external time     |
+|  series (.json / .csv)           |
+|  → outputs SpineOpt JSON         |
++----------------------------------+
+                |
+                v
++----------------------------------+
+|  Spine Toolbox                   |
+|  Import JSON, manage database    |
++----------------------------------+
+                |
+                v
++----------------------------------+
+|  SpineOpt Optimization           |
+|  Solve model                     |
++----------------------------------+
+                |
+                v
++----------------------------------+
+|  Results & external visualization|
+|  (Python/Excel, limited Spine GUI)|
++----------------------------------+
+
+
+1. **Getting Started** — install prerequisites and set up folders:  
+   → [2_getting_started.md](2_getting_started.md)
+2. **Model Components** — what each Excel sheet controls:  
+   → [3_model_components.md](3_model_components.md)
+3. **Building a Model** — take your filled Excel + `data/*.json`, run the parser, import `output.json`:  
+   → [4_building_a_model.md](4_building_a_model.md)
+4. **Running a Model** — select a solver in Spine Toolbox and execute SpineOpt:  
+   → [5_running_a_model.md](5_running_a_model.md)
+5. **Analyzing a Model** — inspect tables, export to CSV/Excel, external plotting:  
+   → [6_analyzing_a_model.md](6_analyzing_a_model.md)
+
+> Ready to jump in? Start at **[Building a Model](4_building_a_model.md)** if your Excel and JSON files are already prepared.
