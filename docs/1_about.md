@@ -31,24 +31,26 @@ MORPHE2US consists of three main components:
 ## Where to go next
 
 
-```{mermaid}
-flowchart TD
+```{eval-rst}
+.. mermaid::
 
-    A[1–2: Collect techno-economic data<br/>(technologies, demands, costs, etc.)]
+   flowchart TD
 
-    B[3: Excel interface (MORPHE2US)<br/>Define commodities, units,<br/>storages, connections, etc.]
+       A[1–2: Collect techno-economic data<br/>(technologies, demands, costs, etc.)]
 
-    C[4: Python parser (MORPHE2US_pipeline.py)<br/>Reads Excel + external time series (.json / .csv)<br/>→ outputs SpineOpt JSON]
+       B[3: Excel interface (MORPHE2US)<br/>Define commodities, units,<br/>storages, connections, etc.]
 
-    D[4: Spine Toolbox<br/>Import JSON, manage database]
+       C[4: Python parser (MORPHE2US_pipeline.py)<br/>Reads Excel + external time series (.json / .csv)<br/>→ outputs SpineOpt JSON]
 
-    E[5: SpineOpt Optimization<br/>Solve model]
+       D[4: Spine Toolbox<br/>Import JSON, manage database]
 
-    F[6: Post-processing & results<br/>External visualization (Python/Excel,<br/>limited Spine GUI)]
+       E[5: SpineOpt Optimization<br/>Solve model]
 
-    A --> B --> C --> D --> E --> F
+       F[6: Post-processing & results<br/>External visualization (Python/Excel,<br/>limited Spine GUI)]
 
+       A --> B --> C --> D --> E --> F
 ```
+
 
 1. **Getting Started** — install prerequisites and set up folders:  
    → [2_getting_started.md](2_getting_started.md)
