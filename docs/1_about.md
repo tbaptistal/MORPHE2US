@@ -33,21 +33,13 @@ MORPHE2US consists of three main components:
 
 ```{mermaid}
 flowchart TD
-
-    A[Collect technoeconomic data]
-
-    B[Excel]
-
-    C[Python]
-
-    D[Spine]
-
-    E[SpineOpt]
-
-    F[Post]
-
-    A --> B --> C --> D --> E --> F
-
+    A[Techno-economic inputs: <br> Prepare technologies, demands, costs, etc...]
+    A --> B[Excel Interface:  <br> Define commodities, units, storages, connections, etc...]
+    B --> C[Python parser: <br> Reads Excel + external time series JSON/CSV <br> -> Outputs SpineOpt JSON]
+    C --> D[Spine Toolbox: <br> Import JSON <br> Manage database]
+    D --> E[SpineOpt Optimization: <br> Solves model]
+    E --> F[Results & external visualization: <br> Python/Excel, limited Spine GUI]
+  
 ```
 
 **TODO**: shift workflow here and align with steps (input prep in 3, python parser/spine toolbox/optimization in 4, model running in 5, post-processing in 6, rest is here) +----------------------------------+ | Collect techno-economic data | | (technologies, demands, etc.) | +----------------------------------+ | v +----------------------------------+ | Excel interface (MORPHE2US) | | Define commodities, units, | | storages, connections, etc. | +----------------------------------+ | v +----------------------------------+ | Python parser | | (MORPHE2US_pipeline.py) | | Reads Excel + external time | | series (.json / .csv) | | → outputs SpineOpt JSON | +----------------------------------+ | v +----------------------------------+ | Spine Toolbox | | Import JSON, manage database | +----------------------------------+ | v +----------------------------------+ | SpineOpt Optimization | | Solve model | +----------------------------------+ | v +----------------------------------+ | Results & external visualization| | (Python/Excel, limited Spine GUI)| +----------------------------------+
