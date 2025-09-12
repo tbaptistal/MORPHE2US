@@ -34,20 +34,11 @@ MORPHE2US consists of three main components:
 ```{mermaid}
 flowchart TD
 
-
     A[Collect]
 
     B[Excel]
 
-    C[Python]
-
-    D[Spine]
-
-    E[SpineOpt]
-
-    F[Post]
-
-    A --> B --> C --> D --> E --> F
+    A --> B
 
 ```
 
