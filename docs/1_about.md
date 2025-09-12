@@ -35,17 +35,17 @@ MORPHE2US consists of three main components:
 flowchart TD
 
 
-    A[Collect technoeconomic data]
+    A[Collect]
 
-    B[Excel interface]
+    B[Excel]
 
-    C[Python parser]
+    C[Python]
 
-    D[Spine Toolbox]
+    D[Spine]
 
-    E[SpineOpt Optimization]
+    E[SpineOpt]
 
-    F[Post processing and results]
+    F[Post]
 
     A --> B --> C --> D --> E --> F
 
