@@ -35,7 +35,7 @@ MORPHE2US consists of three main components:
 flowchart TD
 
 
-    A[Collect techno-economic data]
+    A[Collect technoeconomic data]
 
     B[Excel interface]
 
