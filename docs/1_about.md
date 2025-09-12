@@ -45,7 +45,7 @@ flowchart TD
 
     E[5: SpineOpt Optimization]
 
-    F[6: Post-processing & results]
+    F[6: Post processing & results]
 
     A --> B --> C --> D --> E --> F
 
