@@ -35,17 +35,17 @@ MORPHE2US consists of three main components:
 flowchart TD
 
 
-    A[1-2: Collect techno-economic data]
+    A[Collect techno-economic data]
 
-    B[3: Excel interface (MORPHE2US)]
+    B[Excel interface (MORPHE2US)]
 
-    C[4: Python parser (MORPHE2US_pipeline.py)]
+    C[Python parser (MORPHE2US_pipeline.py)]
 
-    D[4: Spine Toolbox Import JSON, manage database]
+    D[Spine Toolbox Import JSON, manage database]
 
-    E[5: SpineOpt Optimization]
+    E[SpineOpt Optimization]
 
-    F[6: Post processing & results]
+    F[Post processing & results]
 
     A --> B --> C --> D --> E --> F
 
