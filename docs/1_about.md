@@ -34,7 +34,7 @@ MORPHE2US consists of three main components:
 ```{mermaid}
 flowchart TD
 
-    A[Collect techno-economic data]
+    A[Collect technoeconomic data]
 
     B[Excel]
 
