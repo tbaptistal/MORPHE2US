@@ -35,11 +35,11 @@ MORPHE2US consists of three main components:
 flowchart TD
 
 
-    A[1-2: Collect techno-economic data\n (technologies, demands, costs, etc.)]
+    A[Collect]
 
-    B[3: Excel interface (MORPHE2US)\n Define commodities, units,\n storages, connections, etc.]
+    B[Excel interface]
 
-    A --> B
+    A --> B 
 
 ```
 
