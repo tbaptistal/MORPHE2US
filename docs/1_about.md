@@ -37,15 +37,15 @@ flowchart TD
 
     A[Collect techno-economic data]
 
-    B[Excel interface (MORPHE2US)]
+    B[Excel interface]
 
-    C[Python parser (MORPHE2US_pipeline.py)]
+    C[Python parser]
 
     D[Spine Toolbox Import JSON, manage database]
 
     E[SpineOpt Optimization]
 
-    F[Post processing & results]
+    F[Post processing and results]
 
     A --> B --> C --> D --> E --> F
 
