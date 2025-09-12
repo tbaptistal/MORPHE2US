@@ -41,7 +41,7 @@ flowchart TD
 
     C[Python parser]
 
-    D[Spine Toolbox Import JSON, manage database]
+    D[Spine Toolbox]
 
     E[SpineOpt Optimization]
 
