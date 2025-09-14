@@ -35,7 +35,7 @@ MORPHE2US consists of three main components:
 flowchart TD
 
     A[Techno-economic inputs:<br> Prepare technologies, <br> demands, costs, etc...]
-    A --> B[Excel Interface:  <br> Define commodities, <br> units, storages, <br> connections, etc...]
+    A --> B[**Excel Interface:**  <br> Define commodities, <br> units, storages, <br> connections, etc...]
     B --> C[Python parser: <br> Reads Excel + external <br> time series JSON/CSV <br> -> Outputs SpineOpt JSON]
     C --> D[Spine Toolbox: <br> Import JSON <br> Manage database]
     D --> E[SpineOpt Optimization: <br> Solves model]
