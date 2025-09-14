@@ -14,7 +14,7 @@ class Municipality:
         # Add a district to the municipality.
         self.districts.append(district)
 
-    def export_json(self, data: dict):
+    def export_json(self, data: dict, scenario_name: str):
         # Export the municipality's data to JSON format by iterating through districts, nodes, and connections.
         for item in chain(self.districts, self.nodes, self.connections):
             data = item.export_json(data)

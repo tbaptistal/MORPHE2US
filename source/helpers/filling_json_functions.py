@@ -23,15 +23,15 @@
 ### END OF HOW SPINE OPT HANDLES THE JSON FILES ###
 
 # Function to add an entity to the "entities" and "entity_alternatives" sections of the data (json)
-def add_entity(data, entity, name_s):
+def add_entity(data, entity, name_s, scenario_name="Base"):
     # Append the entity to the "entities" list with None as the third element
     data["entities"].append([entity, name_s, None])
     # Append the entity to the "entity_alternatives" list with "Base" and True as additional attributes
-    data["entity_alternatives"].append([entity, name_s, "Base", True])
+    data["entity_alternatives"].append([entity, name_s, scenario_name, True])
     return data
 
 # Function to add a parameter value to the "parameter_values" section of the data vector (json)
-def add_parameter_value(data_vector, entity, name_s, tech, data, data_type):
+def add_parameter_value(data_vector, entity, name_s, tech, data, data_type, scenario_name="Base"):
     # Handle specific data types and format the data accordingly
     match data_type:
         case "duration":
@@ -41,7 +41,7 @@ def add_parameter_value(data_vector, entity, name_s, tech, data, data_type):
             # If the data type is "date_time", format the data as an ISO 8601 string
             data = {"data": data.strftime("%Y-%m-%dT%H:%M:%S"), "type": data_type}
 
-    # Append the parameter value to the "parameter_values" list with "Base" as an additional attribute
-    data_vector["parameter_values"].append([entity, name_s, tech, data, "Base"])
+    # Append the parameter value to the "parameter_values" list with the scenario name as an additional attribute
+    data_vector["parameter_values"].append([entity, name_s, tech, data, scenario_name])
     return data_vector
 

@@ -18,19 +18,19 @@ class Temporal_block(Entity):
     def set_model_name(self, model_name):
         self.model_name = model_name
 
-    def export_json(self, data: dict):
+    def export_json(self, data: dict, scenario_name: str):
         # Add the temporal block entity to the JSON data
-        data = add_entity(data, "temporal_block", self.name)
+        data = add_entity(data, "temporal_block", self.name, scenario_name)
         for key, values in self.direct_parameters.items():
             # Exclude parameters that are not directly usable in the model (e.g., marked with "NaM" or containing "(")
             if not key.startswith("NaM") and "(" not in key:
-                data = add_parameter_value(data, "temporal_block", self.name, key, values["value"], values["type"])
+                data = add_parameter_value(data, "temporal_block", self.name, key, values["value"], values["type"], scenario_name)
 
         # Add the temporal block to the appropriate model structure based on whether it's an investment
         if self.is_investment:
-            data = add_entity(data, f"model__default_investment_temporal_block", [self.model_name, self.name])
+            data = add_entity(data, f"model__default_investment_temporal_block", [self.model_name, self.name], scenario_name)
         else: 
-            data = add_entity(data, f"model__default_temporal_block", [self.model_name, self.name])
+            data = add_entity(data, f"model__default_temporal_block", [self.model_name, self.name], scenario_name)
         return data
     
 
@@ -48,14 +48,14 @@ class Report:
         # Set the model name associated with the report
         self.model_name = model_name
 
-    def export_json(self, data: dict) -> dict:
+    def export_json(self, data: dict, scenario_name: str) -> dict:
         # Add the report entity to the JSON data
-        data = add_entity(data, "report", self.name)
+        data = add_entity(data, "report", self.name, scenario_name)
         # Link the report to the model
-        data = add_entity(data, "model__report", [self.model_name, self.name])
+        data = add_entity(data, "model__report", [self.model_name, self.name], scenario_name)
         # Link each output to the report
         for output in self.output_list:
-            data = add_entity(data, "report__output", [self.name, output])
+            data = add_entity(data, "report__output", [self.name, output], scenario_name)
         return data
     
     def get_output_list_length(self):
@@ -75,11 +75,11 @@ class Stochastic_Scenario:
         # Set the name of the stochastic structure associated with the scenario
         self.name_stochastic_structure = name_stochastic_structure
 
-    def export_json(self, data: dict) -> dict:
+    def export_json(self, data: dict, scenario_name: str):
         # Add the stochastic scenario entity to the JSON data
-        data = add_entity(data, "stochastic_scenario", self.name)
+        data = add_entity(data, "stochastic_scenario", self.name, scenario_name)
         # Link the stochastic scenario to its structure
-        data = add_entity(data, "stochastic_structure__stochastic_scenario", [self.name_stochastic_structure, self.name])
+        data = add_entity(data, "stochastic_structure__stochastic_scenario", [self.name_stochastic_structure, self.name], scenario_name)
         return data
 
 
@@ -97,25 +97,25 @@ class Model(Entity):
         # Initialize the model entity with the name "model"
         super().__init__("model")
 
-    def export_json(self, data: dict):
+    def export_json(self, data: dict, scenario_name: str):
         # Add the model entity to the JSON data
-        data = add_entity(data, "model", self.name)
+        data = add_entity(data, "model", self.name, scenario_name)
 
         # Add the stochastic structure and link it to the model
-        data = add_entity(data, "stochastic_structure", self.name_stochastic_structure)
-        data = add_entity(data, "model__default_stochastic_structure", [self.name, self.name_stochastic_structure])
+        data = add_entity(data, "stochastic_structure", self.name_stochastic_structure, scenario_name)
+        data = add_entity(data, "model__default_stochastic_structure", [self.name, self.name_stochastic_structure], scenario_name)
         # If there are investments, link the default investment structure to the model
         if len(self.investments) > 0:
-            data = add_entity(data, "model__default_investment_stochastic_structure", [self.name, self.name_stochastic_structure])
+            data = add_entity(data, "model__default_investment_stochastic_structure", [self.name, self.name_stochastic_structure], scenario_name)
 
         for key, values in self.direct_parameters.items():
             # Exclude parameters that are not directly usable in the model (e.g., marked with "NaM" or containing "(")
             if not key.startswith("NaM") and "(" not in key:
-                data = add_parameter_value(data, "model", self.name, key, values["value"], values["type"])
+                data = add_parameter_value(data, "model", self.name, key, values["value"], values["type"], scenario_name)
 
         # Export JSON for all associated entities (operations, investments, etc.)
         for item in chain(self.modelisation_structures, self.operations, self.investments, self.reports, self.stochastic_scenarios):
-            data = item.export_json(data)
+            data = item.export_json(data, scenario_name)
         return data
 
     
@@ -145,16 +145,5 @@ class Model(Entity):
         self.stochastic_scenarios.append(stochastic_scenario)
         
 
-    def update_scenario_structure(self):
-        # Update the stochastic scenario structure based on direct parameters
-        if "NaM_scenario_name" in self.direct_parameters:
-            self.add_stochastic_scenario(Stochastic_Scenario(self.direct_parameters["NaM_scenario_name"]["value"]))
-        else:
-            self.add_stochastic_scenario(Stochastic_Scenario("default_scenario"))
-
-        # Add additional scenarios if multiple scenarios are enabled
-        if "NaM_bool_multiple_scenarios" in self.direct_parameters:
-            if self.direct_parameters["NaM_bool_multiple_scenarios"]["value"]:
-                if "NaM_add_scenarios" in self.direct_parameters:
-                    for scenario in self.direct_parameters["NaM_add_scenarios"]["value"].split(";"):
-                        self.add_stochastic_scenario(Stochastic_Scenario(scenario.replace(' ', '')))
+    def update_scenario_structure(self, scenario_name: str):
+        self.add_stochastic_scenario(Stochastic_Scenario(scenario_name))
