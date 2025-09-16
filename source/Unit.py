@@ -72,9 +72,9 @@ class Unit(Entity):
             self.add_direct_parameter(f"NaM_unit__from_node{from_node+1}", "CO2")
             self.add_direct_parameter(f"fix_ratio_in_in_unit_flow(from_node1from_node{from_node+1})", abs(1/self.direct_parameters["NaM_emission"]["value"]))
 
-    def export_json(self, data: dict):
+    def export_json(self, data: dict, scenario_name: str):
         # Add the unit entity to the JSON data
-        data = add_entity(data, "unit", self.full_name)
+        data = add_entity(data, "unit", self.full_name, scenario_name)
 
         dict__link_nodes = {}
         # Process "NaM_unit__" parameters to create links between nodes
@@ -83,7 +83,7 @@ class Unit(Entity):
                 dict__link_nodes[parameter.split("NaM_")[1]] = f'{self.direct_parameters[parameter]["value"]}{self.location_name}'
                 entity_name = f'{parameter.split("NaM_")[1].split("node")[0]}node'
                 entity_linked_to = f'{self.direct_parameters[parameter]["value"]}{self.location_name}'
-                data = add_entity(data, entity_name , [self.full_name, entity_linked_to])
+                data = add_entity(data, entity_name , [self.full_name, entity_linked_to], scenario_name)
         
         # Count the number of "to_node" and "from_node" parameters
         to_node = len([key for key in dict__link_nodes if key.startswith("unit__to_node")])
@@ -92,13 +92,13 @@ class Unit(Entity):
         # Create special links between nodes if there are both input and output nodes
         for i in range(to_node):
             for j in range(from_node):
-                data = add_entity(data, "unit__node__node", [self.full_name, f"{dict__link_nodes[f'unit__to_node{i+1}']}", f"{dict__link_nodes[f'unit__from_node{j+1}']}"])
+                data = add_entity(data, "unit__node__node", [self.full_name, f"{dict__link_nodes[f'unit__to_node{i+1}']}", f"{dict__link_nodes[f'unit__from_node{j+1}']}"], scenario_name)
         
         # Handle cases with two input nodes or two output nodes
         if to_node == 0 and from_node == 2:
-            data = add_entity(data, "unit__node__node", [self.full_name, f"{dict__link_nodes[f'unit__from_node1']}", f"{dict__link_nodes[f'unit__from_node2']}"])
+            data = add_entity(data, "unit__node__node", [self.full_name, f"{dict__link_nodes[f'unit__from_node1']}", f"{dict__link_nodes[f'unit__from_node2']}"], scenario_name)
         if to_node == 2 and from_node == 0:
-            data = add_entity(data, "unit__node__node", [self.full_name, f"{dict__link_nodes[f'unit__to_node1']}", f"{dict__link_nodes[f'unit__to_node2']}"])
+            data = add_entity(data, "unit__node__node", [self.full_name, f"{dict__link_nodes[f'unit__to_node1']}", f"{dict__link_nodes[f'unit__to_node2']}"], scenario_name)
 
         # Add parameter values to the JSON data
         for parameter, values in self.direct_parameters.items():
@@ -106,22 +106,22 @@ class Unit(Entity):
                 match parameter:
                     case p if "unit__from_node" in p:
                         node_name = f'{dict__link_nodes[p.split(")")[0].split("(")[1]]}'
-                        data = add_parameter_value(data, "unit__from_node", [self.full_name, node_name], p.split("(")[0], values["value"], values["type"])
+                        data = add_parameter_value(data, "unit__from_node", [self.full_name, node_name], p.split("(")[0], values["value"], values["type"], scenario_name)
                     case p if "unit__to_node" in p:
                         node_name = f'{dict__link_nodes[p.split(")")[0].split("(")[1]]}'
-                        data = add_parameter_value(data, "unit__to_node", [self.full_name, node_name], p.split("(")[0], values["value"], values["type"])
+                        data = add_parameter_value(data, "unit__to_node", [self.full_name, node_name], p.split("(")[0], values["value"], values["type"], scenario_name)
                     case p if "from_node" in p and "to_node" in p:
                         node_from = f'{dict__link_nodes[f"unit__from_node{p.split("to_node")[0].split("from_node")[1]}"]}'
                         node_to = f'{dict__link_nodes[f"unit__to_node{p.split(")")[0].split("to_node")[1]}"]}'
-                        data = add_parameter_value(data, "unit__node__node", [self.full_name, node_to, node_from], p.split("(")[0], values["value"], values["type"])
+                        data = add_parameter_value(data, "unit__node__node", [self.full_name, node_to, node_from], p.split("(")[0], values["value"], values["type"], scenario_name)
                     case p if "from_node" in p and "to_node" not in p:
                         node_1 = f'{dict__link_nodes[f"unit__from_node{p.split("from_node")[1]}"]}'
                         node_2 = f'{dict__link_nodes[f"unit__from_node{p.split(")")[0].split("from_node")[2]}"]}'
-                        data = add_parameter_value(data, "unit__node__node", [self.full_name, node_1, node_2], p.split("(")[0], values["value"], values["type"])
+                        data = add_parameter_value(data, "unit__node__node", [self.full_name, node_1, node_2], p.split("(")[0], values["value"], values["type"], scenario_name)
                     case p if "from_node" not in p and "to_node" in p:
                         node_1 = f'{dict__link_nodes[f"unit__to_node{p.split("to_node")[1]}"]}'
                         node_2 = f'{dict__link_nodes[f"unit__to_node{p.split(")")[0].split("to_node")[2]}"]}'
-                        data = add_parameter_value(data, "unit__node__node", [self.full_name, node_1, node_2], p.split("(")[0], values["value"], values["type"])
+                        data = add_parameter_value(data, "unit__node__node", [self.full_name, node_1, node_2], p.split("(")[0], values["value"], values["type"], scenario_name)
                     case _:
-                        data = add_parameter_value(data, "unit", self.full_name, parameter, values["value"], values["type"])
+                        data = add_parameter_value(data, "unit", self.full_name, parameter, values["value"], values["type"], scenario_name)
         return data

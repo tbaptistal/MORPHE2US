@@ -128,7 +128,7 @@ class Building:
             item.set_location_name(f"_{self.district_name}_B-LVL_{self.name}")
 
     # Export the building's data to JSON format
-    def export_json(self, data: dict):
+    def export_json(self, data: dict, scenario_name: str):
         for item in chain(self.nodes, self.units, self.connections, self.storages):
-            data = item.export_json(data)
+            data = item.export_json(data, scenario_name)
         return data

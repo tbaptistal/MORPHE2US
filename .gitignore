@@ -127,6 +127,7 @@ dmypy.json
 
 data/*
 MORPHE2US_packages/*
+archives/*
 output.json
 
 Scenarios.xlsx

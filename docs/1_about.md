@@ -43,8 +43,6 @@ flowchart TD
   
 ```
 
-**TODO**: shift workflow here and align with steps (input prep in 3, python parser/spine toolbox/optimization in 4, model running in 5, post-processing in 6, rest is here) +----------------------------------+ | Collect techno-economic data | | (technologies, demands, etc.) | +----------------------------------+ | v +----------------------------------+ | Excel interface (MORPHE2US) | | Define commodities, units, | | storages, connections, etc. | +----------------------------------+ | v +----------------------------------+ | Python parser | | (MORPHE2US_pipeline.py) | | Reads Excel + external time | | series (.json / .csv) | | → outputs SpineOpt JSON | +----------------------------------+ | v +----------------------------------+ | Spine Toolbox | | Import JSON, manage database | +----------------------------------+ | v +----------------------------------+ | SpineOpt Optimization | | Solve model | +----------------------------------+ | v +----------------------------------+ | Results & external visualization| | (Python/Excel, limited Spine GUI)| +----------------------------------+
-
 
 1. **Getting Started** — install prerequisites and set up folders:  
    → [2_getting_started.md](2_getting_started.md)

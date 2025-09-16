@@ -117,8 +117,8 @@ class District:
         for building in self.buildings:
             building.add_node_parameter(target_parameter, building_target, commodity_target, data, data_type, quantitative_flag)
 
-    def export_json(self, data):
+    def export_json(self, data, scenario_name: str):
         # Exports the district's data to JSON format by aggregating data from all components.
         for item in chain(self.nodes, self.units, self.buildings, self.connections, self.storages):
-            data = item.export_json(data)
+            data = item.export_json(data, scenario_name)
         return data
