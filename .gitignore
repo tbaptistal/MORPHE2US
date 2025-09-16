@@ -128,8 +128,9 @@ dmypy.json
 data/*
 MORPHE2US_packages/*
 archives/*
-output.json
+outputs./
 
 Scenarios.xlsx
 
 old_README.md
+tutorial_1.ipynb

@@ -698,6 +698,10 @@ def process_files(excel_filename, output_filename):
         with open('source/template.json') as f:
             data_template = json.load(f)
 
+        # Replace all "Base" occurrences in the template with the scenario name
+        data_template = json.loads(json.dumps(data_template).replace("Base", scenario_name))
+
+
         # Check if building retrofit mode is enabled
         if (list(df_specs_investment[df_specs_investment["code"] == "NaM_building_retrofits"].value))[0] == True:
             # Add the retrofit mode for each building in all districts
@@ -710,12 +714,12 @@ def process_files(excel_filename, output_filename):
         model.add_modelisation_structure(municipality)
 
         # Export the updated model data to the template JSON
-        data_template = model.export_json(data_template, "Base")
+        data_to_export = model.export_json(data_template, scenario_name)
 
         
         # Save the updated template JSON to the output file
         with open(f'outputs/scenario_{scenario_name}-{output_filename}', 'w') as f:
-            json.dump(data_template, f, indent=4)
+            json.dump(data_to_export, f, indent=4)
         print(f"Export complete to scenario_{scenario_name}-{output_filename}")
 
 
