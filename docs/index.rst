@@ -3,7 +3,7 @@
 Welcome to the MORPHE2US documentation!
 =====================================
 
-**MORPHE2US** *(Municipal Optimization for Renewable Projects in Hydrogen & Energy Efficient Utility Solutions)* is a techno-economic modeling tool that takes human-readable inputs and converts them into a format suitable for energy system optimization using `SpineOpt <https://github.com/Spine-project/SpineOpt.jl>`_. It thereby supports municipalities in identifying possible pathways toward net-zero emissions through optimal investments and operation of energy technologies.
+`**MORPHE2US** <https://github.com/tbaptistal/MORPHE2US>`_ *(Municipal Optimization for Renewable Projects in Hydrogen & Energy Efficient Utility Solutions)* is a techno-economic modeling tool that takes human-readable inputs and converts them into a format suitable for energy system optimization using `SpineOpt <https://github.com/Spine-project/SpineOpt.jl>`_. It thereby supports municipalities in identifying possible pathways toward net-zero emissions through optimal investments and operation of energy technologies.
 
 This guide will help you install, configure, run, and analyze models using MORPHE2US and the `Spine Toolbox <https://spine-toolbox.readthedocs.io/en/latest/>`_.
 
